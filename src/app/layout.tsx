@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, IBM_Plex_Sans_Arabic, JetBrains_Mono } from "next/font/google";
 import Navbar from "@/shared/Navbar/navbar";
 import "./globals.css";
-import Footer from "@/shared/Input/Input";
+import Footer from "@/shared/Footer/Footer";
 
 // 1. UI Text
 const inter = Inter({
