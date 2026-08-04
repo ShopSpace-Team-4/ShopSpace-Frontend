@@ -1,26 +1,59 @@
 @import "tailwindcss";
 
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* ========================================= */
+  /* 1. Brand Colors  */
+  /* ========================================= */
+  --brand-primary: #2563EB;        /* Primary CTA, active state, focus ring */
+  --brand-primary-hover: #1D4ED8;  /* Hover state for primary elements */
+  --brand-primary-subtle: #EFF6FF; /* Background tint for selected/active */
+  --brand-primary-border: #BFDBFE; /* Border on hover/focus for brand elements */
+  
+  --brand-accent: #14B8A6;         /* AI features, accent highlights */
+  --brand-accent-hover: #0D9488;   /* Accent hover state */
+  --brand-accent-subtle: #F0FDFA;  /* Accent background tint */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* ========================================= */
+  /* 2. Status Colors */
+  /* ========================================= */
+  --status-success: #22C55E;         /* Positive outcomes, available status */
+  --status-success-subtle: #F0FDF4;  /* Success message background */
+  --status-success-text: #15803D;    /* Success text on light background */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+  --status-warning: #F59E0B;         /* Caution, pending review states */
+  --status-warning-subtle: #FFFBEB;  /* Warning message background */
+  --status-warning-text: #B45309;    /* Warning text on light background */
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  --status-danger: #EF4444;          /* Errors, destructive actions */
+  --status-danger-subtle: #FEF2F2;   /* Error message background */
+  --status-danger-text: #B91C1C;     /* Error text on light background */
+
+  /* ========================================= */
+  /* 3. Surface & Background */
+  /* ========================================= */
+  --bg-base: #F8FAFC;       /* Page canvas background */
+  --bg-elevated: #FFFFFF;   /* Cards, sidebars, panels */
+  --bg-sunken: #F1F5F9;     /* Input fills, chip backgrounds */
+  --bg-overlay: #FFFFFFCC;  /* Navbar blur, modal backdrops (80% opacity white) */
+  --bg-inverse: #0F172A;    /* Dark surfaces, code blocks */
+
+  /* ========================================= */
+  /* 4. Text Colors   */
+  /* ========================================= */
+  --text-primary: #0F172A;   /* Headings, body text, strong labels */
+  --text-secondary: #475569; /* Supporting text, table cells */
+  --text-tertiary: #94A3B8;  /* Timestamps, captions, placeholders */
+  --text-disabled: #CBD5E1;  /* Disabled form elements */
+  --text-inverse: #FFFFFF;   /* Text on dark/colored backgrounds */
+  --text-link: #2563EB;      /* Inline hyperlinks */
+
+  /* ========================================= */
+  /* 5. Borders       */
+  /* ========================================= */
+  --border-subtle: #F1F5F9;  /* Hairline dividers within cards */
+  --border-base: #E2E8F0;    /* Default card/panel borders */
+  --border-strong: #CBD5E1;  /* Hover borders, stronger separators */
+  --border-focus: #93C5FD;   /* Focus ring border */
+  --border-brand: #2563EB;   /* Active/selected element border */
 }
