@@ -2,8 +2,14 @@ import Hero from "./_components/Hero/page";
 import ListingsSection from "./_components/ListingsSection/page";
 import TestimonialsSection from "./_components/TestimonialsSection/page";
 
+import HeroStats from "@/Compontents/HeroStats/HeroStats";
+import AIAdvisor from "@/Compontents/AIAdvisor/AIAdvisor";
+
 export default function Home() {
   return (
+   <>
+      <HeroStats />
+      <AIAdvisor />
     <>
       <Hero />
       <ListingsSection
