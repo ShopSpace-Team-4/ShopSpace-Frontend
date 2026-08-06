@@ -1,12 +1,6 @@
 import ListingsTable from "@/app/_components/ListingTable/page";
-import Sidebar from "@/shared/Sidebar/Sidebar";
 function page() {
-  return (
-    <div className="flex">
-      <Sidebar />
-      <ListingsTable listings={[]} />
-    </div>
-  )
+  return <ListingsTable listings={[]} />;
 }
 
-export default page
+export default page;

@@ -37,11 +37,36 @@ const navItems: {
   href: string;
   icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
 }[] = [
-  { key: "add-listing", label: "Add Listing", href: "/dashboard/add-listing", icon: Plus },
-  { key: "my-listings", label: "My Listings", href: "/dashboard/my-listings", icon: LayoutList },
-  { key: "overview", label: "Overview", href: "/dashboard/overview", icon: LayoutDashboard },
-  { key: "analytics", label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
-  { key: "personal-details", label: "Personal Details", href: "/dashboard/personal-details", icon: User },
+  {
+    key: "add-listing",
+    label: "Add Listing",
+    href: "/dashboard/add-listing",
+    icon: Plus,
+  },
+  {
+    key: "my-listings",
+    label: "My Listings",
+    href: "/dashboard/my-listing",
+    icon: LayoutList,
+  },
+  {
+    key: "overview",
+    label: "Overview",
+    href: "/dashboard/overview",
+    icon: LayoutDashboard,
+  },
+  {
+    key: "analytics",
+    label: "Analytics",
+    href: "/dashboard/analytics",
+    icon: BarChart3,
+  },
+  {
+    key: "personal-details",
+    label: "Personal Details",
+    href: "/dashboard/personal-details",
+    icon: User,
+  },
 ];
 
 export default function Sidebar({
@@ -59,7 +84,13 @@ export default function Sidebar({
       <div className="flex flex-col items-center border-b border-white/[0.08]">
         <div className="flex w-full items-center gap-2.5 border-b border-white/[0.08] px-3 py-3.5">
           <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-(--brand-primary-subtle)">
-            <Image src={userAvatarUrl} alt={userName} fill sizes="36px" className="object-cover" />
+            <Image
+              src={userAvatarUrl}
+              alt={userName}
+              fill
+              sizes="36px"
+              className="object-cover"
+            />
           </div>
           <div className="flex flex-col">
             <span className="text-xs font-semibold leading-[18px] text-(--text-inverse)">
@@ -87,7 +118,11 @@ export default function Sidebar({
             >
               {houseIconFailed ? (
                 <Home
-                  className={mode === "landlord" ? "h-4 w-4 text-indigo-300" : "h-4 w-4 text-white/45"}
+                  className={
+                    mode === "landlord"
+                      ? "h-4 w-4 text-indigo-300"
+                      : "h-4 w-4 text-white/45"
+                  }
                   strokeWidth={1.75}
                 />
               ) : (
@@ -96,7 +131,9 @@ export default function Sidebar({
                   alt=""
                   referrerPolicy="no-referrer"
                   onError={() => setHouseIconFailed(true)}
-                  className={mode === "landlord" ? "h-6 w-6" : "h-6 w-6 opacity-45"}
+                  className={
+                    mode === "landlord" ? "h-6 w-6" : "h-6 w-6 opacity-45"
+                  }
                 />
               )}
               <span
@@ -119,7 +156,11 @@ export default function Sidebar({
             >
               {searchIconFailed ? (
                 <Search
-                  className={mode === "tenant" ? "h-4 w-4 text-indigo-300" : "h-4 w-4 text-white/45"}
+                  className={
+                    mode === "tenant"
+                      ? "h-4 w-4 text-indigo-300"
+                      : "h-4 w-4 text-white/45"
+                  }
                   strokeWidth={1.75}
                 />
               ) : (
@@ -128,7 +169,9 @@ export default function Sidebar({
                   alt=""
                   referrerPolicy="no-referrer"
                   onError={() => setSearchIconFailed(true)}
-                  className={mode === "tenant" ? "h-6 w-6" : "h-6 w-6 opacity-45"}
+                  className={
+                    mode === "tenant" ? "h-6 w-6" : "h-6 w-6 opacity-45"
+                  }
                 />
               )}
               <span
