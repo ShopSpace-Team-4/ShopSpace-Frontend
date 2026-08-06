@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Plus, Eye, Pencil } from "lucide-react";
 
 // ---------- Types ----------
@@ -26,6 +27,7 @@ export interface ListingsTableProps {
   onAddNew?: () => void;
   onView?: (listing: ListingRow) => void;
   onEdit?: (listing: ListingRow) => void;
+  addNewHref?: string;
   className?: string;
 }
 
@@ -56,6 +58,7 @@ export default function ListingsTable({
   listings = [],
   isLoading = false,
   onAddNew,
+  addNewHref,
   onView,
   onEdit,
   className = "",
@@ -65,14 +68,24 @@ export default function ListingsTable({
       {/* Header */}
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-bold text-gray-900">{title}</h2>
-        {onAddNew && (
-          <button
-            onClick={onAddNew}
-            className="flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
+        {addNewHref ? (
+          <Link
+            href={addNewHref}
+            className="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
           >
             <Plus className="h-4 w-4" />
             Add New Listing
-          </button>
+          </Link>
+        ) : (
+          onAddNew && (
+            <button
+              onClick={onAddNew}
+              className="flex items-center gap-1.5 rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
+            >
+              <Plus className="h-4 w-4" />
+              Add New Listing
+            </button>
+          )
         )}
       </div>
 
