@@ -8,10 +8,10 @@ import AIAdvisor from "@/Compontents/AIAdvisor/AIAdvisor";
 export default function Home() {
   return (
    <>
-    
-    
+
       <Hero />
-       <HeroStats />
+      <HeroStats />
+
       <AIAdvisor />
       <ListingsSection
         eyebrow="Featured Listings"
