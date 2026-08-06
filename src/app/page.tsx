@@ -11,6 +11,7 @@ export default function Home() {
 
       <Hero />
       <HeroStats />
+
       <AIAdvisor />
       <ListingsSection
         eyebrow="Featured Listings"
