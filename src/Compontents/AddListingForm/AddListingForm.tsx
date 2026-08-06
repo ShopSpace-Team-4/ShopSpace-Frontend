@@ -92,17 +92,17 @@ export default function AddListingForm() {
   };
 
   return (
-    <div className="flex w-full max-w-[700px] flex-col p-7">
+    <div className="flex w-full max-w-175 flex-col p-7">
       {/* Heading */}
       <h1 className="text-xl font-extrabold tracking-[-0.3px] text-(--text-primary)">
         Add New Listing
       </h1>
-      <p className="mt-1.5 max-w-[421px] text-sm leading-[21px] text-(--text-secondary)">
+      <p className="mt-1.5 max-w-105.25 text-sm leading-5.25 text-(--text-secondary)">
         Fill in your commercial space details to attract the right tenants.
       </p>
 
       {/* Step tabs */}
-      <div className="mt-6 flex max-w-[380px] gap-1 rounded-full bg-(--bg-sunken) p-1">
+      <div className="mt-6 flex max-w-95 gap-1 rounded-full bg-(--bg-sunken) p-1">
         {steps.map((step) => {
           const isActive = step.key === activeStep;
           return (
@@ -137,7 +137,7 @@ export default function AddListingForm() {
             </Field>
 
             {/* Category + Area */}
-            <div className="mt-[18px] flex gap-2.5">
+            <div className="mt-4.5 flex gap-2.5">
               <Field label="Category" className="flex-1">
                 <div className="relative">
                   <select
@@ -165,7 +165,7 @@ export default function AddListingForm() {
             </div>
 
             {/* Address */}
-            <div className="mt-[18px]">
+            <div className="mt-4.5">
               <Field label="Address">
                 <input
                   type="text"
@@ -176,7 +176,7 @@ export default function AddListingForm() {
             </div>
 
             {/* Description */}
-            <div className="mt-[18px]">
+            <div className="mt-4.5">
               <Field label="Description">
                 <textarea
                   value={description}
