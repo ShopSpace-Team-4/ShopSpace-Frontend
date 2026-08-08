@@ -22,7 +22,7 @@ export type SidebarActiveItem =
   | "my-listings"
   | "overview"
   | "analytics"
-  | "personal-details";
+  | "PersonalDetails";
 
 export interface SidebarProps {
   userName?: string;
@@ -62,9 +62,9 @@ const navItems: {
     icon: BarChart3,
   },
   {
-    key: "personal-details",
+    key: "PersonalDetails",
     label: "Personal Details",
-    href: "/dashboard/personal-details",
+    href: "/dashboard/PersonalDetails",
     icon: User,
   },
 ];
@@ -111,22 +111,20 @@ export default function Sidebar({
             <button
               className={[
                 "flex flex-1 flex-col items-center gap-0.5 rounded-[10px] border px-1.5 py-2.5",
-                mode === "landlord"
-                  ? "border-indigo-400/70 bg-indigo-500/20"
-                  : "border-white/10",
-              ].join(" ")}
-            >
-              {houseIconFailed ? (
+                mode === "landlord" ?
+                  "border-indigo-400/70 bg-indigo-500/20"
+                : "border-white/10",
+              ].join(" ")}>
+              {houseIconFailed ?
                 <Home
                   className={
-                    mode === "landlord"
-                      ? "h-4 w-4 text-indigo-300"
-                      : "h-4 w-4 text-white/45"
+                    mode === "landlord" ?
+                      "h-4 w-4 text-indigo-300"
+                    : "h-4 w-4 text-white/45"
                   }
                   strokeWidth={1.75}
                 />
-              ) : (
-                <img
+              : <img
                   src="https://i.postimg.cc/SsJZ7vzS/3d-house-1.png"
                   alt=""
                   referrerPolicy="no-referrer"
@@ -135,13 +133,12 @@ export default function Sidebar({
                     mode === "landlord" ? "h-6 w-6" : "h-6 w-6 opacity-45"
                   }
                 />
-              )}
+              }
               <span
                 className={[
                   "text-[10px] font-bold leading-3",
                   mode === "landlord" ? "text-indigo-200" : "text-white/45",
-                ].join(" ")}
-              >
+                ].join(" ")}>
                 Landlord
               </span>
             </button>
@@ -149,22 +146,20 @@ export default function Sidebar({
             <button
               className={[
                 "flex flex-1 flex-col items-center gap-0.5 rounded-[10px] border px-1.5 py-2.5",
-                mode === "tenant"
-                  ? "border-indigo-400/70 bg-indigo-500/20"
-                  : "border-white/10",
-              ].join(" ")}
-            >
-              {searchIconFailed ? (
+                mode === "tenant" ?
+                  "border-indigo-400/70 bg-indigo-500/20"
+                : "border-white/10",
+              ].join(" ")}>
+              {searchIconFailed ?
                 <Search
                   className={
-                    mode === "tenant"
-                      ? "h-4 w-4 text-indigo-300"
-                      : "h-4 w-4 text-white/45"
+                    mode === "tenant" ?
+                      "h-4 w-4 text-indigo-300"
+                    : "h-4 w-4 text-white/45"
                   }
                   strokeWidth={1.75}
                 />
-              ) : (
-                <img
+              : <img
                   src="https://i.postimg.cc/PxP6zR8t/search-1.png"
                   alt=""
                   referrerPolicy="no-referrer"
@@ -173,13 +168,12 @@ export default function Sidebar({
                     mode === "tenant" ? "h-6 w-6" : "h-6 w-6 opacity-45"
                   }
                 />
-              )}
+              }
               <span
                 className={[
                   "text-[10px] font-bold leading-3",
                   mode === "tenant" ? "text-indigo-200" : "text-white/45",
-                ].join(" ")}
-              >
+                ].join(" ")}>
                 Tenant
               </span>
             </button>
@@ -202,11 +196,10 @@ export default function Sidebar({
               href={item.href}
               className={[
                 "flex items-center gap-2.5 rounded-[10px] px-3 py-2.5 text-[13px] font-medium transition-colors",
-                isActive
-                  ? "border border-(--brand-primary)/30 bg-(--brand-primary)/20 text-(--text-inverse)"
-                  : "border border-transparent text-white/55 hover:bg-white/5",
-              ].join(" ")}
-            >
+                isActive ?
+                  "border border-(--brand-primary)/30 bg-(--brand-primary)/20 text-(--text-inverse)"
+                : "border border-transparent text-white/55 hover:bg-white/5",
+              ].join(" ")}>
               <Icon className="h-4 w-4" strokeWidth={1.75} />
               {item.label}
             </Link>
