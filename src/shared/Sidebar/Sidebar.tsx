@@ -22,21 +22,27 @@ export type SidebarActiveItem =
   | "my-listings"
   | "overview"
   | "analytics"
-  | "personal-details";
+  | "personal-details"
+  | (string & {}); // allow custom keys too, when navItems is overridden
+
+export interface SidebarNavItem {
+  key: SidebarActiveItem;
+  label: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+}
 
 export interface SidebarProps {
   userName?: string;
   userAvatarUrl?: string;
   mode?: SidebarMode;
   active?: SidebarActiveItem;
+  navItems?: SidebarNavItem[]; // ← جديد: قابلة للتمرير من برّه
+  onModeChange?: (mode: SidebarMode) => void; // ← جديد: عشان الزرارين يبقوا فعليين
 }
 
-const navItems: {
-  key: SidebarActiveItem;
-  label: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
-}[] = [
+// نفس القائمة الافتراضية بتاعت الـ Landlord، بس دلوقتي مجرد "default" مش القيمة الوحيدة
+const defaultNavItems: SidebarNavItem[] = [
   {
     key: "add-listing",
     label: "Add Listing",
@@ -74,6 +80,8 @@ export default function Sidebar({
   userAvatarUrl = "/images/agent-1.jpg",
   mode = "landlord",
   active = "add-listing",
+  navItems = defaultNavItems,
+  onModeChange,
 }: SidebarProps) {
   const [houseIconFailed, setHouseIconFailed] = useState(false);
   const [searchIconFailed, setSearchIconFailed] = useState(false);
@@ -97,7 +105,7 @@ export default function Sidebar({
               {userName}
             </span>
             <span className="text-[10px] leading-[15px] text-white/40">
-              Landlord ✓
+              {mode === "landlord" ? "Landlord ✓" : "Tenant ✓"}
             </span>
           </div>
         </div>
@@ -109,11 +117,12 @@ export default function Sidebar({
 
           <div className="flex w-full gap-1.5">
             <button
+              onClick={() => onModeChange?.("landlord")}
               className={[
                 "flex flex-1 flex-col items-center gap-0.5 rounded-[10px] border px-1.5 py-2.5",
                 mode === "landlord"
                   ? "border-indigo-400/70 bg-indigo-500/20"
-                  : "border-white/10",
+                  : "border-white/10 hover:bg-white/5",
               ].join(" ")}
             >
               {houseIconFailed ? (
@@ -147,18 +156,19 @@ export default function Sidebar({
             </button>
 
             <button
+              onClick={() => onModeChange?.("tenant")}
               className={[
                 "flex flex-1 flex-col items-center gap-0.5 rounded-[10px] border px-1.5 py-2.5",
                 mode === "tenant"
-                  ? "border-indigo-400/70 bg-indigo-500/20"
-                  : "border-white/10",
+                  ? "border-emerald-400/70 bg-emerald-500/20"
+                  : "border-white/10 hover:bg-white/5",
               ].join(" ")}
             >
               {searchIconFailed ? (
                 <Search
                   className={
                     mode === "tenant"
-                      ? "h-4 w-4 text-indigo-300"
+                      ? "h-4 w-4 text-emerald-300"
                       : "h-4 w-4 text-white/45"
                   }
                   strokeWidth={1.75}
@@ -177,7 +187,7 @@ export default function Sidebar({
               <span
                 className={[
                   "text-[10px] font-bold leading-3",
-                  mode === "tenant" ? "text-indigo-200" : "text-white/45",
+                  mode === "tenant" ? "text-emerald-200" : "text-white/45",
                 ].join(" ")}
               >
                 Tenant
@@ -203,7 +213,9 @@ export default function Sidebar({
               className={[
                 "flex items-center gap-2.5 rounded-[10px] px-3 py-2.5 text-[13px] font-medium transition-colors",
                 isActive
-                  ? "border border-(--brand-primary)/30 bg-(--brand-primary)/20 text-(--text-inverse)"
+                  ? mode === "tenant"
+                    ? "border border-emerald-400/30 bg-emerald-500/20 text-(--text-inverse)"
+                    : "border border-(--brand-primary)/30 bg-(--brand-primary)/20 text-(--text-inverse)"
                   : "border border-transparent text-white/55 hover:bg-white/5",
               ].join(" ")}
             >
