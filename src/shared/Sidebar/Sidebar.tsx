@@ -68,9 +68,9 @@ const defaultNavItems: SidebarNavItem[] = [
     icon: BarChart3,
   },
   {
-    key: "personal-details",
+    key: "PersonalDetails",
     label: "Personal Details",
-    href: "/dashboard/personal-details",
+    href: "/dashboard/PersonalDetails",
     icon: User,
   },
 ];
@@ -128,14 +128,13 @@ export default function Sidebar({
               {houseIconFailed ? (
                 <Home
                   className={
-                    mode === "landlord"
-                      ? "h-4 w-4 text-indigo-300"
-                      : "h-4 w-4 text-white/45"
+                    mode === "landlord" ?
+                      "h-4 w-4 text-indigo-300"
+                    : "h-4 w-4 text-white/45"
                   }
                   strokeWidth={1.75}
                 />
-              ) : (
-                <img
+              : <img
                   src="https://i.postimg.cc/SsJZ7vzS/3d-house-1.png"
                   alt=""
                   referrerPolicy="no-referrer"
@@ -144,13 +143,12 @@ export default function Sidebar({
                     mode === "landlord" ? "h-6 w-6" : "h-6 w-6 opacity-45"
                   }
                 />
-              )}
+              }
               <span
                 className={[
                   "text-[10px] font-bold leading-3",
                   mode === "landlord" ? "text-indigo-200" : "text-white/45",
-                ].join(" ")}
-              >
+                ].join(" ")}>
                 Landlord
               </span>
             </button>
@@ -173,8 +171,7 @@ export default function Sidebar({
                   }
                   strokeWidth={1.75}
                 />
-              ) : (
-                <img
+              : <img
                   src="https://i.postimg.cc/PxP6zR8t/search-1.png"
                   alt=""
                   referrerPolicy="no-referrer"
@@ -183,7 +180,7 @@ export default function Sidebar({
                     mode === "tenant" ? "h-6 w-6" : "h-6 w-6 opacity-45"
                   }
                 />
-              )}
+              }
               <span
                 className={[
                   "text-[10px] font-bold leading-3",

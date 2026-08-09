@@ -19,26 +19,29 @@ export default function ListingsSection({
   className = "",
 }: ListingsSectionProps) {
   return (
-    <section className={`px-6 py-10 ${className}`}>
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">
-            {eyebrow}
-          </p>
-          <h2 className="mt-1 text-2xl font-bold leading-snug text-gray-900 sm:text-3xl">
-            {heading}
-          </h2>
+    // 1. زودنا المسافة الرأسية لـ py-16 أو py-24 عشان السكشن يتنفس
+    <section className={`py-16 sm:py-24 ${className}`}>
+      {/* 2. حطينا كل حاجة جوه Container بيوسطن المحتوى وميخليهوش يفرش على الشاشات الكبيرة */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* 3. خلينا الـ Header متجاوب (عمودي في الموبايل، وأفقي في الشاشات الأكبر) */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+          <div className="max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">
+              {eyebrow}
+            </p>
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              {heading}
+            </h2>
+          </div>
+
+          <ViewAllButton href={viewAllHref} onClick={onViewAllClick} />
         </div>
 
-        <ViewAllButton href={viewAllHref} onClick={onViewAllClick} />
-      </div>
-
-      {/* Cards grid */}
-      <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {listings.map((listing, i) => (
-          <PropertyCard key={i} {...listing} className="w-full max-w-none" />
-        ))}
+        <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {listings.map((listing, i) => (
+            <PropertyCard key={i} {...listing} className="w-full max-w-none" />
+          ))}
+        </div>
       </div>
     </section>
   );
