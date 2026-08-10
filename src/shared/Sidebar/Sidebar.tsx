@@ -42,7 +42,7 @@ export interface SidebarProps {
 }
 
 // نفس القائمة الافتراضية بتاعت الـ Landlord، بس دلوقتي مجرد "default" مش القيمة الوحيدة
-const defaultNavItems: SidebarNavItem[] = [
+export const defaultNavItems: SidebarNavItem[] = [
   {
     key: "add-listing",
     label: "Add Listing",
@@ -128,13 +128,14 @@ export default function Sidebar({
               {houseIconFailed ? (
                 <Home
                   className={
-                    mode === "landlord" ?
-                      "h-4 w-4 text-indigo-300"
-                    : "h-4 w-4 text-white/45"
+                    mode === "landlord"
+                      ? "h-4 w-4 text-indigo-300"
+                      : "h-4 w-4 text-white/45"
                   }
                   strokeWidth={1.75}
                 />
-              : <img
+              ) : (
+                <img
                   src="https://i.postimg.cc/SsJZ7vzS/3d-house-1.png"
                   alt=""
                   referrerPolicy="no-referrer"
@@ -143,7 +144,7 @@ export default function Sidebar({
                     mode === "landlord" ? "h-6 w-6" : "h-6 w-6 opacity-45"
                   }
                 />
-              }
+              )}
               <span
                 className={[
                   "text-[10px] font-bold leading-3",
@@ -171,7 +172,8 @@ export default function Sidebar({
                   }
                   strokeWidth={1.75}
                 />
-              : <img
+              ) : (
+                <img
                   src="https://i.postimg.cc/PxP6zR8t/search-1.png"
                   alt=""
                   referrerPolicy="no-referrer"
@@ -180,7 +182,7 @@ export default function Sidebar({
                     mode === "tenant" ? "h-6 w-6" : "h-6 w-6 opacity-45"
                   }
                 />
-              }
+              )}
               <span
                 className={[
                   "text-[10px] font-bold leading-3",
@@ -225,10 +227,18 @@ export default function Sidebar({
 
       {/* Footer actions */}
       <div className="flex flex-col gap-1 border-t border-white/[0.08] p-3">
-        <button className="flex items-center gap-2 rounded-[10px] px-3 py-2 text-xs text-white/40 transition-colors hover:bg-white/5 cursor-pointer">
+        <Link
+          href="/dashboard/marketplace"
+          className={[
+            "flex items-center gap-2 rounded-[10px] px-3 py-2 text-xs transition-colors",
+            active === "marketplace"
+              ? "bg-white/10 text-(--text-inverse)"
+              : "text-white/40 hover:bg-white/5",
+          ].join(" ")}
+        >
           <Store className="h-3.5 w-3.5" strokeWidth={1.75} />
           Marketplace
-        </button>
+        </Link>
         <button className="flex items-center gap-2 rounded-[10px] px-3 py-2 text-xs text-white/40 transition-colors hover:bg-white/5 cursor-pointer">
           <LogOut className="h-3.5 w-3.5" strokeWidth={1.75} />
           Sign Out
