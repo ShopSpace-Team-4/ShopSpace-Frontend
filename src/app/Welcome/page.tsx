@@ -8,15 +8,15 @@ export default function WelcomePage() {
 
   
   const handleGoToAccount = () => {
-    console.log('Navigating to Account Dashboard...');
+    router.push('/dashboard/add-listing');
     
-    router.push('/account'); 
+    
   };
 
   const handleGoToMarketPlace = () => {
-    console.log('Navigating to Market Place...');
+    router.push('/dashboard/marketplace');
     
-    router.push('/marketplace'); 
+    
   };
 
   // --- Render ---
