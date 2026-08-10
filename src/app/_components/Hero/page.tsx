@@ -49,7 +49,6 @@ export default function Hero({
         <SearchForm />
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 w-full max-w-4xl">
-          {/* استخدمنا الـ Props بتاعة الإحصائيات هنا */}
           {stats.map((stat) => (
             <div key={stat.label} className="flex flex-col gap-1">
               <span className="text-3xl font-bold text-white">
