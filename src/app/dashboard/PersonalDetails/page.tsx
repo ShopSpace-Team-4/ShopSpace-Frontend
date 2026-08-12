@@ -5,14 +5,15 @@ import PersonalDetailsView from './PersonalDetailsView';
 
 export default function PersonalDetailsPage() {
   
+  // التعديل هنا: حطينا الداتا مطابقة للتصميم بدل الـ ***
   const [formData, setFormData] = useState({
-    firstName: '***', 
-    lastName: '***',
-    email: '****',
+    firstName: 'Abdullah', 
+    lastName: 'Al-Rashid',
+    email: 'abdullah.alrashid@email.com',
     whatsapp: '0123456789',
     nationalId: '1234567890',
-    city: '****',
-    district: '****',
+    city: 'Alexandria',
+    district: 'Al Olaya',
     bio: ''
   });
 
@@ -25,7 +26,6 @@ export default function PersonalDetailsPage() {
   const [activeMode, setActiveMode] = useState<'landlord' | 'tenant'>('landlord');
 
   // --- Handlers ---
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));

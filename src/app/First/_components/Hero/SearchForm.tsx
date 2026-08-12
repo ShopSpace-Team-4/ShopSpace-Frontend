@@ -3,13 +3,11 @@
 import { useState } from "react";
 import { ChevronDown, Search } from "lucide-react";
 
-// 1. تعريف نوع البيانات للخيارات بتاعت الـ Select
 export interface SelectOption {
   value: string;
   label: string;
 }
 
-// 2. الـ Props اللي الكومبوننت ده بيستقبلها
 export interface SearchFormProps {
   placeholder?: string;
   tags?: string[];
