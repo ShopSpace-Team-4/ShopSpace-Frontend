@@ -2,14 +2,9 @@ import React from 'react';
 import { 
   Home, 
   Search, 
-  Plus, 
-  List, 
-  Layout, 
-  BarChart2, 
-  User, 
-  ArrowLeft, 
   Pencil, 
   CheckCircle2,
+  User,
   Bell
 } from 'lucide-react';
 
@@ -48,39 +43,40 @@ export default function PersonalDetailsView({
   onDelete
 }: PersonalDetailsViewProps) {
   return (
-    <div className="flex min-h-screen bg-slate-50 font-sans">
-      {/* ---------------- Main Content (المحتوى الرئيسي) ---------------- */}
-      <main className="flex-1 ml-64 p-8 max-w-5xl">
+    <main className="flex-1 min-h-screen bg-slate-50 p-8 md:p-10 font-sans overflow-y-auto">
+      {/* التعديل هنا: شيلنا mx-auto عشان المحتوى يفضل ناحية الشمال، وخليناه max-w-4xl عشان يبقى ملموم */}
+      <div className="max-w-4xl">
         
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-2xl font-bold text-slate-900 mb-1">Personal Details</h1>
             <p className="text-sm text-slate-500">Manage your profile, identity, and account settings</p>
           </div>
           <button 
             onClick={onSave}
-            className="px-4 py-2.5 bg-[#3b82f6] hover:bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors"
+            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors shrink-0"
           >
             Save Changes
           </button>
         </div>
 
         {/* Profile Card */}
-        <div className="bg-white p-6 rounded-xl border border-slate-200 mb-6 flex items-center justify-between">
+        <div className="bg-white p-6 rounded-xl border border-slate-200 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="relative">
               <div className="w-16 h-16 rounded-full overflow-hidden border border-slate-200">
+                {/* رجعنا الصورة المؤقتة عشان متظهرش مكسورة */}
                 <img src="https://i.pravatar.cc/150?img=11" alt="Profile" className="w-full h-full object-cover" />
               </div>
-              <button className="absolute bottom-0 right-0 p-1 bg-blue-500 text-white rounded-full border-2 border-white hover:bg-blue-600">
+              <button className="absolute bottom-0 right-0 p-1 bg-blue-600 text-white rounded-full border-2 border-white hover:bg-blue-700">
                 <Pencil size={12} />
               </button>
             </div>
             <div>
               <h3 className="font-bold text-slate-900">{formData.firstName} {formData.lastName}</h3>
               <p className="text-sm text-slate-500 mb-2">{formData.lastName} Properties</p>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-600">
                   <Home size={10} /> Landlord
                 </span>
@@ -93,7 +89,7 @@ export default function PersonalDetailsView({
               </div>
             </div>
           </div>
-          <button className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
+          <button className="px-4 py-2 border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shrink-0">
             Change Photo
           </button>
         </div>
@@ -151,7 +147,7 @@ export default function PersonalDetailsView({
         </div>
 
         {/* Notification Preferences */}
-        <div className="bg-white rounded-xl border border-slate-200 mb-6 p-6">
+        <div className="bg-white rounded-xl border border-slate-200 p-6">
           <div className="flex items-center gap-2 mb-6 text-slate-800 font-semibold">
             <Bell size={18} />
             <h2>Notification Preferences</h2>
@@ -193,15 +189,7 @@ export default function PersonalDetailsView({
           </div>
         </div>
 
-        <div className="bg-red-50/30 rounded-xl border border-red-200 p-6">
-          <h3 className="text-sm font-semibold text-red-600 mb-1">Danger Zone</h3>
-          <p className="text-xs text-red-500/80 mb-4">Permanently delete your account and all associated listings. This action cannot be undone.</p>
-          <button onClick={onDelete} className="px-4 py-2 border border-red-200 text-red-600 text-xs font-semibold rounded-lg hover:bg-red-50 transition-colors">
-            Delete Account
-          </button>
-        </div>
-
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
