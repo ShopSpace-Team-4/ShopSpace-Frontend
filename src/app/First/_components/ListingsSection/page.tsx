@@ -1,5 +1,5 @@
-import PropertyCard, { PropertyCardProps } from "../../../shared/Card/card";
-import ViewAllButton from "../../../shared/Button/button";
+import ViewAllButton from "@/shared/Button/button";
+import PropertyCard, { PropertyCardProps } from "@/shared/Card/card";
 
 export interface ListingsSectionProps {
   eyebrow?: string;

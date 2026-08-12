@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Star } from "lucide-react";
 
 export interface TestimonialCardProps {
-  rating: number; // out of 5
+  rating: number; 
   quote: string;
   authorName: string;
   authorRole: string;

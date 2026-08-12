@@ -1,6 +1,6 @@
 import TestimonialCard, {
   TestimonialCardProps,
-} from "../../../shared/TestimonialCard/testimonialCard";
+} from "@/shared/TestimonialCard/testimonialCard";
 
 export interface TestimonialsStat {
   value: string; // e.g. "4.9", "99%"
