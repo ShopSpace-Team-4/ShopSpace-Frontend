@@ -44,7 +44,6 @@ export default function PersonalDetailsView({
 }: PersonalDetailsViewProps) {
   return (
     <main className="flex-1 min-h-screen bg-slate-50 p-8 md:p-10 font-sans overflow-y-auto">
-      {/* التعديل هنا: شيلنا mx-auto عشان المحتوى يفضل ناحية الشمال، وخليناه max-w-4xl عشان يبقى ملموم */}
       <div className="max-w-4xl">
         
         {/* Header */}
@@ -66,7 +65,6 @@ export default function PersonalDetailsView({
           <div className="flex items-center gap-4">
             <div className="relative">
               <div className="w-16 h-16 rounded-full overflow-hidden border border-slate-200">
-                {/* رجعنا الصورة المؤقتة عشان متظهرش مكسورة */}
                 <img src="https://i.pravatar.cc/150?img=11" alt="Profile" className="w-full h-full object-cover" />
               </div>
               <button className="absolute bottom-0 right-0 p-1 bg-blue-600 text-white rounded-full border-2 border-white hover:bg-blue-700">
@@ -147,7 +145,7 @@ export default function PersonalDetailsView({
         </div>
 
         {/* Notification Preferences */}
-        <div className="bg-white rounded-xl border border-slate-200 p-6">
+        <div className="bg-white rounded-xl border border-slate-200 mb-6 p-6">
           <div className="flex items-center gap-2 mb-6 text-slate-800 font-semibold">
             <Bell size={18} />
             <h2>Notification Preferences</h2>
@@ -187,6 +185,15 @@ export default function PersonalDetailsView({
               </button>
             </div>
           </div>
+        </div>
+
+        {/* Danger Zone */}
+        <div className="bg-red-50/30 rounded-xl border border-red-200 p-6">
+          <h3 className="text-sm font-semibold text-red-600 mb-1">Danger Zone</h3>
+          <p className="text-xs text-red-500/80 mb-4">Permanently delete your account and all associated listings. This action cannot be undone.</p>
+          <button onClick={onDelete} className="px-4 py-2 border border-red-200 text-red-600 text-xs font-semibold rounded-lg hover:bg-red-50 transition-colors">
+            Delete Account
+          </button>
         </div>
 
       </div>
