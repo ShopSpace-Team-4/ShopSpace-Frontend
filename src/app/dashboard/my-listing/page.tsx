@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
-import ListingsTable from "@/app/First/_components/ListingTable/page";
+import ListingsTable from "@/app/_components/ListingTable/page";
 
 function page() {
   return (
