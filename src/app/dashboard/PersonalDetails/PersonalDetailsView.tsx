@@ -33,10 +33,10 @@ interface PersonalDetailsViewProps {
 export default function PersonalDetailsView({
   formData,
   notifications,
-  activeMode,
+  // activeMode,
   onChange,
   onToggleNotification,
-  onSwitchMode,
+  // onSwitchMode,
   onSave,
   onDelete,
 }: PersonalDetailsViewProps) {

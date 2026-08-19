@@ -49,25 +49,25 @@ const features = [
 export default function HeroStats() {
   return (
     <section className="w-full bg-(--bg-elevated)">
-      <div className="mx-auto w-full max-w-[1200px] px-5 py-16 sm:px-8 sm:py-20 lg:px-0 lg:py-24">
+      <div className="mx-auto w-full max-w-300 px-5 py-16 sm:px-8 sm:py-20 lg:px-0 lg:py-24">
         {/* Top: heading + stats grid */}
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
           {/* Left: heading */}
-          <div className="max-w-[380px]">
-            <span className="inline-flex items-center rounded-full bg-(--brand-accent-subtle) px-[9px] py-[3px] text-[11px] font-semibold tracking-wide text-(--brand-accent-hover)">
+          <div className="max-w-95">
+            <span className="inline-flex items-center rounded-full bg-(--brand-accent-subtle) px-2.25 py-0.75 text-[11px] font-semibold tracking-wide text-(--brand-accent-hover)">
               Platform Features
             </span>
-            <h2 className="mt-4 text-[42px] font-extrabold leading-[48px] tracking-[-0.8px] text-(--text-primary)">
+            <h2 className="mt-4 text-[42px] font-extrabold leading-12 tracking-[-0.8px] text-(--text-primary)">
               Everything to Find or Fill a Space
             </h2>
-            <p className="mt-4 text-base leading-[27px] text-(--text-secondary)">
+            <p className="mt-4 text-base leading-6.75 text-(--text-secondary)">
               AI-powered intelligence meets verified listings and secure
               tools, everything you need in one platform.
             </p>
           </div>
 
           {/* Right: stats grid */}
-          <div className="grid w-full grid-cols-2 gap-0 border border-(--border-base) sm:max-w-[758px]">
+          <div className="grid w-full grid-cols-2 gap-0 border border-(--border-base) sm:max-w-189.5">
             {stats.map((stat, i) => (
               <div
                 key={stat.label}
@@ -77,7 +77,7 @@ export default function HeroStats() {
                   i < 2 ? "border-b border-(--border-base)" : "",
                 ].join(" ")}
               >
-                <span className="text-[28px] font-extrabold leading-[42px] tracking-[-0.5px] text-(--text-primary)">
+                <span className="text-[28px] font-extrabold leading-10.5 tracking-[-0.5px] text-(--text-primary)">
                   {stat.value}
                 </span>
                 <span className="text-[13px] leading-5 text-(--text-tertiary)">
@@ -104,10 +104,10 @@ export default function HeroStats() {
                       strokeWidth={1.75}
                     />
                   </div>
-                  <h3 className="mt-5 text-base font-bold leading-[22px] text-(--text-primary)">
+                  <h3 className="mt-5 text-base font-bold leading-5.5 text-(--text-primary)">
                     {feature.title}
                   </h3>
-                  <p className="mt-2.5 text-[13px] leading-[22px] text-(--text-secondary)">
+                  <p className="mt-2.5 text-[13px] leading-5.5 text-(--text-secondary)">
                     {feature.description}
                   </p>
                 </div>

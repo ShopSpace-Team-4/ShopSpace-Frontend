@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { ChevronDown, Check, X } from "lucide-react";
+import Image from "next/image";
 
 type StepKey = "basic" | "details" | "media";
 
@@ -38,7 +39,9 @@ export default function AddListingForm() {
   const [description, setDescription] = useState("");
 
   // Details & Amenities state
-  const [selectedAmenities, setSelectedAmenities] = useState<Set<string>>(new Set());
+  const [selectedAmenities, setSelectedAmenities] = useState<Set<string>>(
+    new Set(),
+  );
   const [numberOfFloors, setNumberOfFloors] = useState("");
   const [floorNumber, setFloorNumber] = useState("");
   const [availableFrom, setAvailableFrom] = useState("");
@@ -77,7 +80,9 @@ export default function AddListingForm() {
 
   const addPhotos = (files: FileList | null) => {
     if (!files) return;
-    const imageFiles = Array.from(files).filter((file) => file.type.startsWith("image/"));
+    const imageFiles = Array.from(files).filter((file) =>
+      file.type.startsWith("image/"),
+    );
     setPhotos((prev) => [...prev, ...imageFiles]);
   };
 
@@ -112,11 +117,10 @@ export default function AddListingForm() {
               onClick={() => setActiveStep(step.key)}
               className={[
                 "flex-1 rounded-full py-1.5 text-xs font-semibold transition-colors cursor-pointer",
-                isActive
-                  ? "bg-(--bg-elevated) text-(--brand-primary) shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)]"
-                  : "text-(--text-tertiary) hover:text-(--text-secondary)",
-              ].join(" ")}
-            >
+                isActive ?
+                  "bg-(--bg-elevated) text-(--brand-primary) shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)]"
+                : "text-(--text-tertiary) hover:text-(--text-secondary)",
+              ].join(" ")}>
               {step.label}
             </button>
           );
@@ -143,8 +147,7 @@ export default function AddListingForm() {
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full appearance-none rounded-[10px] bg-(--bg-sunken) px-3.5 py-2.5 text-sm text-(--text-primary) outline-none focus:ring-2 focus:ring-(--border-focus)"
-                  >
+                    className="w-full appearance-none rounded-[10px] bg-(--bg-sunken) px-3.5 py-2.5 text-sm text-(--text-primary) outline-none focus:ring-2 focus:ring-(--border-focus)">
                     {categories.map((cat) => (
                       <option key={cat} value={cat}>
                         {cat}
@@ -183,7 +186,7 @@ export default function AddListingForm() {
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Describe your space, key selling points, nearby landmarks..."
                   rows={4}
-                  className="w-full resize-none rounded-[10px] bg-(--bg-sunken) px-3.5 py-2.5 text-sm leading-[21px] text-(--text-primary) placeholder:text-(--text-primary)/50 outline-none focus:ring-2 focus:ring-(--border-focus)"
+                  className="w-full resize-none rounded-[10px] bg-(--bg-sunken) px-3.5 py-2.5 text-sm leading-5.25 text-(--text-primary) placeholder:text-(--text-primary)/50 outline-none focus:ring-2 focus:ring-(--border-focus)"
                 />
               </Field>
               <p className="mt-1 text-[11px] leading-4 text-(--text-tertiary)">
@@ -210,18 +213,19 @@ export default function AddListingForm() {
                       type="button"
                       onClick={() => toggleAmenity(amenity)}
                       aria-pressed={isChecked}
-                      className="flex items-center gap-1.5 rounded-full bg-(--bg-sunken) px-3 py-1.5 text-xs font-medium text-(--text-secondary) transition-colors cursor-pointer"
-                    >
+                      className="flex items-center gap-1.5 rounded-full bg-(--bg-sunken) px-3 py-1.5 text-xs font-medium text-(--text-secondary) transition-colors cursor-pointer">
                       <span
                         className={[
-                          "flex h-[13px] w-[13px] items-center justify-center rounded-[2px] border",
-                          isChecked
-                            ? "border-(--brand-accent) bg-(--brand-accent)"
-                            : "border-[#767676] bg-(--bg-elevated)",
-                        ].join(" ")}
-                      >
+                          "flex h-3.25 w-3.25 items-center justify-center rounded-xs border",
+                          isChecked ?
+                            "border-(--brand-accent) bg-(--brand-accent)"
+                          : "border-[#767676] bg-(--bg-elevated)",
+                        ].join(" ")}>
                         {isChecked && (
-                          <Check className="h-2.5 w-2.5 text-(--text-inverse)" strokeWidth={3} />
+                          <Check
+                            className="h-2.5 w-2.5 text-(--text-inverse)"
+                            strokeWidth={3}
+                          />
                         )}
                       </span>
                       {amenity}
@@ -232,7 +236,7 @@ export default function AddListingForm() {
             </div>
 
             {/* Number of Floors + Floor Number */}
-            <div className="mt-[18px] flex gap-2.5">
+            <div className="mt-4.5 flex gap-2.5">
               <Field label="Number of Floors" className="flex-1">
                 <input
                   type="number"
@@ -255,7 +259,7 @@ export default function AddListingForm() {
             </div>
 
             {/* Available From + Minimum Lease Term */}
-            <div className="mt-[18px] flex gap-2.5">
+            <div className="mt-4.5 flex gap-2.5">
               <Field label="Available From" className="flex-1">
                 <input
                   type="date"
@@ -295,7 +299,7 @@ export default function AddListingForm() {
             </Field>
 
             {/* Security Deposit */}
-            <div className="mt-[18px]">
+            <div className="mt-4.5">
               <Field label="Security Deposit">
                 <input
                   type="text"
@@ -308,8 +312,10 @@ export default function AddListingForm() {
             </div>
 
             {/* Upload Photos */}
-            <div className="mt-[18px]">
-              <p className="text-[13px] font-semibold text-(--text-primary)">Upload Photos</p>
+            <div className="mt-4.5">
+              <p className="text-[13px] font-semibold text-(--text-primary)">
+                Upload Photos
+              </p>
 
               <div
                 onDragOver={(e) => {
@@ -320,10 +326,13 @@ export default function AddListingForm() {
                 onDrop={handleDrop}
                 className={[
                   "mt-2.5 flex flex-col items-center rounded-[10px] border-2 border-dashed bg-(--bg-sunken) px-10 py-10 text-center transition-colors",
-                  isDragActive ? "border-(--brand-primary)" : "border-(--border-base)",
-                ].join(" ")}
-              >
-                <img
+                  isDragActive ?
+                    "border-(--brand-primary)"
+                  : "border-(--border-base)",
+                ].join(" ")}>
+                <Image
+                  width={10}
+                  height={10}
                   src="https://i.postimg.cc/KzR9rHgh/image.png"
                   alt=""
                   referrerPolicy="no-referrer"
@@ -347,8 +356,7 @@ export default function AddListingForm() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="mt-3.5 rounded-full border border-(--brand-primary-subtle) px-3.5 py-1.5 text-xs font-semibold text-(--brand-primary) transition-colors hover:bg-(--brand-primary-subtle) cursor-pointer"
-                >
+                  className="mt-3.5 rounded-full border border-(--brand-primary-subtle) px-3.5 py-1.5 text-xs font-semibold text-(--brand-primary) transition-colors hover:bg-(--brand-primary-subtle) cursor-pointer">
                   Browse Files
                 </button>
               </div>
@@ -358,15 +366,13 @@ export default function AddListingForm() {
                   {photos.map((photo, index) => (
                     <span
                       key={`${photo.name}-${index}`}
-                      className="flex items-center gap-1.5 rounded-full bg-(--bg-sunken) px-3 py-1.5 text-xs font-medium text-(--text-secondary)"
-                    >
+                      className="flex items-center gap-1.5 rounded-full bg-(--bg-sunken) px-3 py-1.5 text-xs font-medium text-(--text-secondary)">
                       {photo.name}
                       <button
                         type="button"
                         onClick={() => removePhoto(index)}
                         aria-label={`Remove ${photo.name}`}
-                        className="cursor-pointer text-(--text-tertiary) hover:text-(--text-primary)"
-                      >
+                        className="cursor-pointer text-(--text-tertiary) hover:text-(--text-primary)">
                         <X className="h-3 w-3" strokeWidth={2} />
                       </button>
                     </span>
@@ -383,16 +389,14 @@ export default function AddListingForm() {
             type="button"
             onClick={goPrevious}
             disabled={isFirstStep}
-            className="rounded-full px-5 py-2.5 text-sm font-semibold text-(--text-secondary) opacity-50 transition-opacity disabled:cursor-not-allowed enabled:cursor-pointer enabled:opacity-100 enabled:hover:opacity-80"
-          >
+            className="rounded-full px-5 py-2.5 text-sm font-semibold text-(--text-secondary) opacity-50 transition-opacity disabled:cursor-not-allowed enabled:cursor-pointer enabled:opacity-100 enabled:hover:opacity-80">
             ← Previous
           </button>
 
           <button
             type="button"
             onClick={goNext}
-            className="rounded-full bg-(--brand-primary) px-5 py-2.5 text-sm font-semibold text-(--text-inverse) shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:bg-(--brand-primary-hover) cursor-pointer"
-          >
+            className="rounded-full bg-(--brand-primary) px-5 py-2.5 text-sm font-semibold text-(--text-inverse) shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:bg-(--brand-primary-hover) cursor-pointer">
             {isLastStep ? "🚀 Publish Listing" : "Next Step →"}
           </button>
         </div>

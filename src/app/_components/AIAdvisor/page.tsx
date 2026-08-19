@@ -10,20 +10,20 @@ const points = [
 export default function AIAdvisor() {
   return (
     <section className="w-full bg-(--bg-inverse)">
-      <div className="mx-auto w-full max-w-[1200px] px-5 py-24 sm:px-8 lg:px-0">
+      <div className="mx-auto w-full max-w-300 px-5 py-24 sm:px-8 lg:px-0">
         <div className="flex flex-col items-center gap-16 lg:flex-row lg:items-center lg:justify-between">
           {/* Left: copy */}
-          <div className="w-full max-w-[568px]">
+          <div className="w-full max-w-142">
             <span className="inline-flex items-center gap-2 rounded-full border border-(--brand-accent)/25 bg-(--brand-accent)/15 px-3.5 py-1.5 text-[13px] font-medium text-(--text-inverse)/90">
               <Sparkles className="h-3.5 w-3.5" strokeWidth={2} />
               AI Business Advisor
             </span>
 
-            <h2 className="mt-6 max-w-[433px] text-[42px] font-extrabold leading-[50px] tracking-[-0.8px] text-(--text-inverse)">
+            <h2 className="mt-6 max-w-108.25 text-[42px] font-extrabold leading-12.5 tracking-[-0.8px] text-(--text-inverse)">
               Let AI Choose Your Perfect Location
             </h2>
 
-            <p className="mt-5 max-w-[568px] text-base leading-[27px] text-(--text-inverse)/65">
+            <p className="mt-5 max-w-142 text-base leading-6.75 text-(--text-inverse)/65">
               Tell our AI about your business concept, target customers, and
               budget — it will scan the market and recommend the best spots
               for you to open.
@@ -38,7 +38,7 @@ export default function AIAdvisor() {
                       strokeWidth={3}
                     />
                   </span>
-                  <span className="text-sm leading-[21px] text-(--text-inverse)/80">
+                  <span className="text-sm leading-5.25 text-(--text-inverse)/80">
                     {point}
                   </span>
                 </li>
@@ -52,7 +52,7 @@ export default function AIAdvisor() {
           </div>
 
           {/* Right: chat mockup */}
-          <div className="w-full max-w-[420px] rounded-[18px] border border-(--text-inverse)/10 bg-(--text-inverse)/5 p-6">
+          <div className="w-full max-w-105 rounded-[18px] border border-(--text-inverse)/10 bg-(--text-inverse)/5 p-6">
             <div className="flex items-center gap-2.5 border-b border-(--text-inverse)/10 pb-4">
               <div className="flex h-9 w-9 items-center justify-center rounded-md bg-linear-to-br from-(--brand-accent) to-(--brand-primary)">
                 <Sparkles className="h-4 w-4 text-(--text-inverse)" strokeWidth={2} />
@@ -72,19 +72,19 @@ export default function AIAdvisor() {
             </div>
 
             <div className="mt-4 flex flex-col gap-3">
-              <div className="ml-auto max-w-[276px] rounded-[18px_18px_4px_18px] bg-(--brand-primary) px-3.5 py-2.5 text-[13px] leading-5 text-(--text-inverse)">
+              <div className="ml-auto max-w-69 rounded-[18px_18px_4px_18px] bg-(--brand-primary) px-3.5 py-2.5 text-[13px] leading-5 text-(--text-inverse)">
                 I want to open a specialty coffee shop. Budget SAR 15,000/month, targeting young professionals.
               </div>
 
-              <div className="mr-auto max-w-[276px] rounded-[18px_18px_18px_4px] bg-(--text-inverse)/10 px-3.5 py-2.5 text-[13px] leading-5 text-(--text-inverse)/85">
+              <div className="mr-auto max-w-69 rounded-[18px_18px_18px_4px] bg-(--text-inverse)/10 px-3.5 py-2.5 text-[13px] leading-5 text-(--text-inverse)/85">
                 Great profile! Al Olaya District leads — 78% young professional density with strong daytime foot traffic.
               </div>
 
-              <div className="ml-auto max-w-[276px] rounded-[18px_18px_4px_18px] bg-(--brand-primary) px-3.5 py-2.5 text-[13px] leading-5 text-(--text-inverse)">
+              <div className="ml-auto max-w-69 rounded-[18px_18px_4px_18px] bg-(--brand-primary) px-3.5 py-2.5 text-[13px] leading-5 text-(--text-inverse)">
                 Yes, show me the top recommendation with ROI estimate.
               </div>
 
-              <div className="mr-auto max-w-[276px] rounded-[18px_18px_18px_4px] bg-(--text-inverse)/10 px-3.5 py-2.5 text-[13px] leading-5 text-(--text-inverse)/85">
+              <div className="mr-auto max-w-69 rounded-[18px_18px_18px_4px] bg-(--text-inverse)/10 px-3.5 py-2.5 text-[13px] leading-5 text-(--text-inverse)/85">
                 Top pick: King Fahd Road corner unit (120m²), SAR 8,500/month. Estimated payback period: 14 months.
               </div>
             </div>
