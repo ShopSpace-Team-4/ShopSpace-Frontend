@@ -5,14 +5,13 @@ import SimpCard, {
   SimplePropertyCardProps,
 } from "../../../shared/simplecard/Simplecard";
 
+type SavedListing = Omit<SimplePropertyCardProps, "onToggleFavorite" | "onClick">;
+
 // بيانات تجريبية مؤقتة — استبدليها لاحقًا ببيانات جايه من الـ API
-const savedListings: Omit<
-  SimplePropertyCardProps,
-  "onToggleFavorite" | "onClick"
->[] = [
+const savedListings: SavedListing[] = [
   {
     id: "1",
-    imageUrl: "/images/mall-escalator.jpg",
+    imageUrl: "/LoginImg.jpg",
     title: "Prime Corner Unit",
     neighborhood: "Mandra",
     city: "Alexandria",
