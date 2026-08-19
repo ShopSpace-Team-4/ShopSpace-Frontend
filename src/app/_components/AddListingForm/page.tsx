@@ -186,7 +186,7 @@ export default function AddListingForm() {
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Describe your space, key selling points, nearby landmarks..."
                   rows={4}
-                  className="w-full resize-none rounded-[10px] bg-(--bg-sunken) px-3.5 py-2.5 text-sm leading-[21px] text-(--text-primary) placeholder:text-(--text-primary)/50 outline-none focus:ring-2 focus:ring-(--border-focus)"
+                  className="w-full resize-none rounded-[10px] bg-(--bg-sunken) px-3.5 py-2.5 text-sm leading-5.25 text-(--text-primary) placeholder:text-(--text-primary)/50 outline-none focus:ring-2 focus:ring-(--border-focus)"
                 />
               </Field>
               <p className="mt-1 text-[11px] leading-4 text-(--text-tertiary)">
@@ -216,7 +216,7 @@ export default function AddListingForm() {
                       className="flex items-center gap-1.5 rounded-full bg-(--bg-sunken) px-3 py-1.5 text-xs font-medium text-(--text-secondary) transition-colors cursor-pointer">
                       <span
                         className={[
-                          "flex h-[13px] w-[13px] items-center justify-center rounded-[2px] border",
+                          "flex h-3.25 w-3.25 items-center justify-center rounded-xs border",
                           isChecked ?
                             "border-(--brand-accent) bg-(--brand-accent)"
                           : "border-[#767676] bg-(--bg-elevated)",
@@ -236,7 +236,7 @@ export default function AddListingForm() {
             </div>
 
             {/* Number of Floors + Floor Number */}
-            <div className="mt-[18px] flex gap-2.5">
+            <div className="mt-4.5 flex gap-2.5">
               <Field label="Number of Floors" className="flex-1">
                 <input
                   type="number"
@@ -259,7 +259,7 @@ export default function AddListingForm() {
             </div>
 
             {/* Available From + Minimum Lease Term */}
-            <div className="mt-[18px] flex gap-2.5">
+            <div className="mt-4.5 flex gap-2.5">
               <Field label="Available From" className="flex-1">
                 <input
                   type="date"
@@ -299,7 +299,7 @@ export default function AddListingForm() {
             </Field>
 
             {/* Security Deposit */}
-            <div className="mt-[18px]">
+            <div className="mt-4.5">
               <Field label="Security Deposit">
                 <input
                   type="text"
@@ -312,7 +312,7 @@ export default function AddListingForm() {
             </div>
 
             {/* Upload Photos */}
-            <div className="mt-[18px]">
+            <div className="mt-4.5">
               <p className="text-[13px] font-semibold text-(--text-primary)">
                 Upload Photos
               </p>
