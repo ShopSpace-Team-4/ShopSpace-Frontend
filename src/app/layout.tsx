@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, IBM_Plex_Sans_Arabic, JetBrains_Mono } from "next/font/google";
-// import SiteChrome from "@/shared/SiteChrome/SiteChrome";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./globals.css";
 
 // 1. UI Text
@@ -41,7 +41,9 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${ibmPlexSansArabic.variable} ${jetBrainsMono.variable}`}>
       <body className="min-h-full flex flex-col font-sans bg-base text-primary">
-        {children}
+        <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID_HERE">
+          {children}
+        </GoogleOAuthProvider>
       </body>
     </html>
   );
