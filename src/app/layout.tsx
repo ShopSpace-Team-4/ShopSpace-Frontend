@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, IBM_Plex_Sans_Arabic, JetBrains_Mono } from "next/font/google";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./globals.css";
+import Provider from "./provider";
 
 // 1. UI Text
 const inter = Inter({
@@ -39,7 +40,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${ibmPlexSansArabic.variable} ${jetBrainsMono.variable}`}>
+      className={`${inter.variable} ${ibmPlexSansArabic.variable} ${jetBrainsMono.variable}`}
+    >
       <body className="min-h-full flex flex-col font-sans bg-base text-primary">
         <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID_HERE">
           {children}
