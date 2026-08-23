@@ -118,8 +118,8 @@ export default function LoginView({
             <p className="text-sm text-slate-500">Sign in to manage your properties and listings</p>
           </div>
 
-          {/* أزرار التسجيل السريع (Google & Apple) Custom */}
           <div className="flex gap-4 mb-6">
+            
             <button
               onClick={onGoogleLoginClick}
               type="button"
@@ -192,7 +192,7 @@ export default function LoginView({
               type="submit"
               disabled={isLoading}
               className="w-full bg-[#3b82f6] hover:bg-blue-600 text-white font-semibold py-3 rounded-lg mt-2 transition-colors text-center cursor-pointer disabled:bg-[#93c5fd] disabled:cursor-not-allowed">
-              {isLoading ? "Signing In..." : "Sign In"}
+              {isLoading ? "loading..." : "Login"}
             </button>
           </form>
 
