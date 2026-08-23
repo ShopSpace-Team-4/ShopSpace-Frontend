@@ -58,8 +58,6 @@ export default function PersonalDetailsView({
             {isSaving ? "Saving..." : "Save Changes"}
           </button>
         </div>
-
-        {/* Profile Card */}
         <div className="bg-white p-6 rounded-xl border border-slate-200 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="relative">
@@ -87,7 +85,6 @@ export default function PersonalDetailsView({
           </div>
         </div>
 
-        {/* Form Settings */}
         <div className="bg-white rounded-xl border border-slate-200 mb-6 p-6">
           <div className="flex items-center gap-2 mb-6 text-slate-800 font-semibold">
             <User size={18} />
@@ -159,7 +156,6 @@ export default function PersonalDetailsView({
           </form>
         </div>
 
-        {/* Notification Preferences */}
         <div className="bg-white rounded-xl border border-slate-200 mb-6 p-6">
           <div className="flex items-center gap-2 mb-6 text-slate-800 font-semibold">
             <Bell size={18} />
@@ -205,7 +201,6 @@ export default function PersonalDetailsView({
           </div>
         </div>
 
-        {/* Danger Zone */}
         <div className="bg-red-50/30 rounded-xl border border-red-200 p-6">
           <h3 className="text-sm font-semibold text-red-600 mb-1">Danger Zone</h3>
           <p className="text-xs text-red-500/80 mb-4">
