@@ -4,7 +4,6 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./globals.css";
 import { UserProvider } from "@/context/UserContext";
 
-// 1. UI Text
 const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -12,14 +11,13 @@ const inter = Inter({
   display: "swap",
 });
 
-// 2. Arabic Text
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-arabic",
   display: "swap",
 });
-// 3. Code & Tokens
+
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
@@ -43,7 +41,8 @@ export default function RootLayout({
       className={`${inter.variable} ${ibmPlexSansArabic.variable} ${jetBrainsMono.variable}`}>
       <body className="min-h-full flex flex-col font-sans bg-base text-primary">
         <UserProvider>
-          <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID_HERE">
+          <GoogleOAuthProvider
+            clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
             {children}
           </GoogleOAuthProvider>
         </UserProvider>
