@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "i.pravatar.cc",
       },
+      new URL("https://i.postimg.cc/KzR9rHgh/**"),
     ],
   },
 };

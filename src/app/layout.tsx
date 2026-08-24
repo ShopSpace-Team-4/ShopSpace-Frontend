@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, IBM_Plex_Sans_Arabic, JetBrains_Mono } from "next/font/google";
-// import SiteChrome from "@/shared/SiteChrome/SiteChrome";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./globals.css";
 import Provider from "./provider";
 
