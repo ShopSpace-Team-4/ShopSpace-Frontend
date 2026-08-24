@@ -1,21 +1,37 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PersonalDetailsView from './PersonalDetailsView';
+import { useUser } from '@/context/UserContext';
+import { updateProfileAction } from '@/actions/user'; 
 
 export default function PersonalDetailsPage() {
+  const { user, refetchUser, isLoading: isUserLoading } = useUser();
   
-  // التعديل هنا: حطينا الداتا مطابقة للتصميم بدل الـ ***
+  const [isSaving, setIsSaving] = useState(false);
+
   const [formData, setFormData] = useState({
-    firstName: 'Abdullah', 
-    lastName: 'Al-Rashid',
-    email: 'abdullah.alrashid@email.com',
-    whatsapp: '0123456789',
-    nationalId: '1234567890',
+    firstName: '', 
+    lastName: '',
+    email: '',
+    whatsapp: '', 
+    nationalId: '1234567890', 
     city: 'Alexandria',
     district: 'Al Olaya',
     bio: ''
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        email: user.email || '',
+        whatsapp: user.phone || '', 
+      }));
+    }
+  }, [user]);
 
   const [notifications, setNotifications] = useState({
     email: true,
@@ -39,9 +55,25 @@ export default function PersonalDetailsPage() {
     setActiveMode(mode);
   };
 
-  const handleSave = () => {
-    console.log('Saving Data:', { formData, notifications, activeMode });
-    alert('Changes saved successfully!');
+  const handleSave = async () => {
+    setIsSaving(true);
+    
+    const payload = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      phone: formData.whatsapp
+    };
+
+    const result = await updateProfileAction(payload);
+    
+    if (result.success) {
+      alert('Profile updated successfully!');
+      await refetchUser(); 
+    } else {
+      alert(`Error updating profile: ${result.error}`);
+    }
+    
+    setIsSaving(false);
   };
 
   const handleDelete = () => {
@@ -51,11 +83,16 @@ export default function PersonalDetailsPage() {
     }
   };
 
+  if (isUserLoading) {
+    return <div className="flex-1 flex justify-center items-center h-screen bg-slate-50">Loading profile...</div>;
+  }
+
   return (
     <PersonalDetailsView
       formData={formData}
       notifications={notifications}
       activeMode={activeMode}
+      isSaving={isSaving}
       onChange={handleChange}
       onToggleNotification={handleToggleNotification}
       onSwitchMode={handleSwitchMode}
