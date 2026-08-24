@@ -12,7 +12,12 @@ export async function apiFetch<T>(
 
   headers.set("Content-Type", "application/json");
 
-  const token = localStorage.getItem("accessToken");
+  let token: string | undefined;
+
+  if (typeof window === "undefined") {
+    const { cookies } = await import("next/headers");
+    token = (await cookies()).get("accessToken")?.value;
+  }
 
   if (token) {
     headers.set("Authorization", `Bearer ${token}`);
@@ -21,11 +26,11 @@ export async function apiFetch<T>(
   const response = await fetch(`${API_URL}${path}`, {
     ...options,
     headers,
+    credentials: "include",
     cache: "no-store",
   });
 
   if (response.status === 401) {
-    localStorage.removeItem("accessToken");
     throw new Error("Unauthorized");
   }
 
