@@ -43,10 +43,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans bg-base text-primary">
         <UserProvider>
-          <GoogleOAuthProvider
-            clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
-            {children}
-          </GoogleOAuthProvider>
+          
+          <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID_HERE">
+          {children}
+        </GoogleOAuthProvider>
         </UserProvider>
       </body>
     </html>
