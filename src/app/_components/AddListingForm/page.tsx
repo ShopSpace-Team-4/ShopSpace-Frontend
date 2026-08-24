@@ -1,8 +1,14 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ChevronDown, Check, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChevronDown, Check, X, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
+import {
+  createListing,
+  publishListing,
+  uploadListingMedia,
+} from "@/actions/listings";
 
 type StepKey = "basic" | "details" | "media";
 
@@ -12,30 +18,48 @@ const steps: { key: StepKey; label: string }[] = [
   { key: "media", label: "Media & Pricing" },
 ];
 
-const categories = ["Retail", "Office", "Restaurant", "Warehouse", "Showroom"];
+// Must match backend enum values exactly (see integration guide, section 7).
+const categories = [
+  "Retail",
+  "Showroom",
+  "Office",
+  "Warehouse",
+  "Kiosk",
+  "Restaurant",
+  "Other",
+];
 
 const amenities = [
-  "Parking",
-  "Security",
-  "AC",
-  "Storage",
-  "Loading Dock",
-  "Kitchen Exhaust",
-  "Grease Trap",
-  "High-Speed Internet",
-  "Meeting Rooms",
-  "Reception",
-  "Display Windows",
-  "Changing Rooms",
-  "Disabled Access",
-  "Cold Storage",
+  { code: "PARKING", label: "Parking" },
+  { code: "SECURITY", label: "Security" },
+  { code: "AC", label: "AC" },
+  { code: "STORAGE", label: "Storage" },
+  { code: "LOADING_DOCK", label: "Loading Dock" },
+  { code: "KITCHEN_EXHAUST", label: "Kitchen Exhaust" },
+  { code: "GREASE_TRAP", label: "Grease Trap" },
+  { code: "HIGH_SPEED_INTERNET", label: "High-Speed Internet" },
+  { code: "MEETING_ROOMS", label: "Meeting Rooms" },
+  { code: "RECEPTION", label: "Reception" },
+  { code: "DISPLAY_WINDOWS", label: "Display Windows" },
+  { code: "CHANGING_ROOMS", label: "Changing Rooms" },
+  { code: "DISABLED_ACCESS", label: "Disabled Access" },
+  { code: "COLD_STORAGE", label: "Cold Storage" },
 ];
 
 export default function AddListingForm() {
+  const router = useRouter();
   const [activeStep, setActiveStep] = useState<StepKey>("basic");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // Basic Info state
+  const [title, setTitle] = useState("");
   const [category, setCategory] = useState(categories[0]);
+  const [areaSqm, setAreaSqm] = useState("");
+  const [city, setCity] = useState("");
+  const [district, setDistrict] = useState("");
+  const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
 
   // Details & Amenities state
@@ -49,7 +73,7 @@ export default function AddListingForm() {
 
   // Media & Pricing state
   const [annualRent, setAnnualRent] = useState("");
-  const [securityDeposit, setSecurityDeposit] = useState("");
+  const [securityDepositMonths, setSecurityDepositMonths] = useState("");
   const [photos, setPhotos] = useState<File[]>([]);
   const [isDragActive, setIsDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -66,13 +90,13 @@ export default function AddListingForm() {
     if (!isLastStep) setActiveStep(steps[stepIndex + 1].key);
   };
 
-  const toggleAmenity = (amenity: string) => {
+  const toggleAmenity = (code: string) => {
     setSelectedAmenities((prev) => {
       const next = new Set(prev);
-      if (next.has(amenity)) {
-        next.delete(amenity);
+      if (next.has(code)) {
+        next.delete(code);
       } else {
-        next.add(amenity);
+        next.add(code);
       }
       return next;
     });
@@ -94,6 +118,108 @@ export default function AddListingForm() {
     e.preventDefault();
     setIsDragActive(false);
     addPhotos(e.dataTransfer.files);
+  };
+
+  const validateBeforeSubmit = (): string | null => {
+    if (!title.trim()) return "Listing title is required.";
+    if (!areaSqm || Number(areaSqm) <= 0) return "Area (m²) is required.";
+    if (!city.trim()) return "City is required.";
+    if (!district.trim()) return "District is required.";
+    if (!address.trim()) return "Address is required.";
+    if (!description.trim()) return "Description is required.";
+    if (!annualRent || Number(annualRent) <= 0)
+      return "Annual rent is required.";
+    if (!securityDepositMonths || Number(securityDepositMonths) <= 0)
+      return "Security deposit (months) is required.";
+    return null;
+  };
+
+  const resetForm = () => {
+    setTitle("");
+    setCategory(categories[0]);
+    setAreaSqm("");
+    setCity("");
+    setDistrict("");
+    setAddress("");
+    setDescription("");
+    setSelectedAmenities(new Set());
+    setNumberOfFloors("");
+    setFloorNumber("");
+    setAvailableFrom("");
+    setMinLeaseTerm("");
+    setAnnualRent("");
+    setSecurityDepositMonths("");
+    setPhotos([]);
+    setActiveStep("basic");
+  };
+
+  const handlePublish = async () => {
+    const validationError = validateBeforeSubmit();
+    if (validationError) {
+      setError(validationError);
+      // Jump back to whichever step is missing info.
+      if (!title || !areaSqm || !city || !district || !address || !description) {
+        setActiveStep("basic");
+      }
+      return;
+    }
+
+    setError(null);
+    setShowSuccess(false);
+    setIsSubmitting(true);
+
+    try {
+      // 1. Create the listing (starts as PENDING on the backend).
+      const created = await createListing({
+        title: title.trim(),
+        category,
+        areaSqm: Number(areaSqm),
+        city: city.trim(),
+        district: district.trim(),
+        address: address.trim(),
+        description: description.trim(),
+        amenities: Array.from(selectedAmenities),
+        numberOfFloors: numberOfFloors ? Number(numberOfFloors) : 1,
+        floorNumber: floorNumber ? Number(floorNumber) : 0,
+        availableFrom: availableFrom || undefined,
+        minimumLeaseTerm: minLeaseTerm || undefined,
+        annualRent: Number(annualRent),
+        securityDepositMonths: Number(securityDepositMonths),
+      });
+
+      const listingId = created.data.id;
+
+      // 2. Upload photos, if any were attached.
+      if (photos.length > 0) {
+        const formData = new FormData();
+        photos.forEach((photo) => formData.append("photos", photo));
+        await uploadListingMedia(listingId, formData);
+      }
+
+      // 3. Publish so it shows up as AVAILABLE in the marketplace.
+      await publishListing(listingId);
+
+      resetForm();
+      setShowSuccess(true);
+      router.refresh();
+
+      // Hide the success banner after a few seconds.
+      setTimeout(() => setShowSuccess(false), 5000);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to publish listing.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handlePrimaryAction = () => {
+    if (isLastStep) {
+      handlePublish();
+    } else {
+      goNext();
+    }
   };
 
   return (
@@ -127,14 +253,30 @@ export default function AddListingForm() {
         })}
       </div>
 
+      {/* Success banner */}
+      {showSuccess && (
+        <div className="mt-6 flex items-center gap-2.5 rounded-[10px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+          <CheckCircle2 className="h-4.5 w-4.5 shrink-0" />
+          Listing added successfully! It&apos;s now live in the marketplace.
+        </div>
+      )}
+
       {/* Card */}
       <div className="mt-7 rounded-[18px] border border-(--border-base) bg-(--bg-elevated) p-7">
+        {error && (
+          <div className="mb-4.5 rounded-[10px] border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-600">
+            {error}
+          </div>
+        )}
+
         {activeStep === "basic" && (
           <div className="flex flex-col">
             {/* Listing Title */}
             <Field label="Listing Title">
               <input
                 type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Prime Retail Unit – Al Olaya District"
                 className="w-full rounded-[10px] bg-(--bg-sunken) px-3.5 py-2.5 text-sm text-(--text-primary) placeholder:text-(--text-primary)/50 outline-none focus:ring-2 focus:ring-(--border-focus)"
               />
@@ -161,7 +303,32 @@ export default function AddListingForm() {
               <Field label="Area (m²)" className="flex-1">
                 <input
                   type="number"
+                  value={areaSqm}
+                  onChange={(e) => setAreaSqm(e.target.value)}
                   placeholder="e.g. 120"
+                  className="w-full rounded-[10px] bg-(--bg-sunken) px-3.5 py-2.5 text-sm text-(--text-primary) placeholder:text-(--text-primary)/50 outline-none focus:ring-2 focus:ring-(--border-focus)"
+                />
+              </Field>
+            </div>
+
+            {/* City + District */}
+            <div className="mt-4.5 flex gap-2.5">
+              <Field label="City" className="flex-1">
+                <input
+                  type="text"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder="e.g. Cairo"
+                  className="w-full rounded-[10px] bg-(--bg-sunken) px-3.5 py-2.5 text-sm text-(--text-primary) placeholder:text-(--text-primary)/50 outline-none focus:ring-2 focus:ring-(--border-focus)"
+                />
+              </Field>
+
+              <Field label="District" className="flex-1">
+                <input
+                  type="text"
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                  placeholder="e.g. New Cairo"
                   className="w-full rounded-[10px] bg-(--bg-sunken) px-3.5 py-2.5 text-sm text-(--text-primary) placeholder:text-(--text-primary)/50 outline-none focus:ring-2 focus:ring-(--border-focus)"
                 />
               </Field>
@@ -172,7 +339,9 @@ export default function AddListingForm() {
               <Field label="Address">
                 <input
                   type="text"
-                  placeholder="Full street address including district and city"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Building / street-level detail, e.g. Building 12, Street 90"
                   className="w-full rounded-[10px] bg-(--bg-sunken) px-3.5 py-2.5 text-sm text-(--text-primary) placeholder:text-(--text-primary)/50 outline-none focus:ring-2 focus:ring-(--border-focus)"
                 />
               </Field>
@@ -205,13 +374,13 @@ export default function AddListingForm() {
                 Amenities Available
               </p>
               <div className="mt-2.5 flex flex-wrap gap-2">
-                {amenities.map((amenity) => {
-                  const isChecked = selectedAmenities.has(amenity);
+                {amenities.map(({ code, label }) => {
+                  const isChecked = selectedAmenities.has(code);
                   return (
                     <button
-                      key={amenity}
+                      key={code}
                       type="button"
-                      onClick={() => toggleAmenity(amenity)}
+                      onClick={() => toggleAmenity(code)}
                       aria-pressed={isChecked}
                       className="flex items-center gap-1.5 rounded-full bg-(--bg-sunken) px-3 py-1.5 text-xs font-medium text-(--text-secondary) transition-colors cursor-pointer">
                       <span
@@ -228,7 +397,7 @@ export default function AddListingForm() {
                           />
                         )}
                       </span>
-                      {amenity}
+                      {label}
                     </button>
                   );
                 })}
@@ -285,12 +454,12 @@ export default function AddListingForm() {
         {activeStep === "media" && (
           <div className="flex flex-col">
             {/* Annual Rent */}
-            <Field label="Annual Rent (SAR)">
+            <Field label="Annual Rent (EGP)">
               <input
                 type="number"
                 value={annualRent}
                 onChange={(e) => setAnnualRent(e.target.value)}
-                placeholder="e.g. 85000"
+                placeholder="e.g. 600000"
                 className="w-full rounded-[10px] bg-(--bg-sunken) px-3.5 py-2.5 text-sm text-(--text-primary) placeholder:text-(--text-primary)/50 outline-none focus:ring-2 focus:ring-(--border-focus)"
               />
               <p className="mt-1 text-[11px] leading-4 text-(--text-tertiary)">
@@ -300,12 +469,12 @@ export default function AddListingForm() {
 
             {/* Security Deposit */}
             <div className="mt-4.5">
-              <Field label="Security Deposit">
+              <Field label="Security Deposit (months)">
                 <input
-                  type="text"
-                  value={securityDeposit}
-                  onChange={(e) => setSecurityDeposit(e.target.value)}
-                  placeholder="e.g. 3 months rent"
+                  type="number"
+                  value={securityDepositMonths}
+                  onChange={(e) => setSecurityDepositMonths(e.target.value)}
+                  placeholder="e.g. 3"
                   className="w-full rounded-[10px] bg-(--bg-sunken) px-3.5 py-2.5 text-sm text-(--text-primary) placeholder:text-(--text-primary)/50 outline-none focus:ring-2 focus:ring-(--border-focus)"
                 />
               </Field>
@@ -388,16 +557,21 @@ export default function AddListingForm() {
           <button
             type="button"
             onClick={goPrevious}
-            disabled={isFirstStep}
+            disabled={isFirstStep || isSubmitting}
             className="rounded-full px-5 py-2.5 text-sm font-semibold text-(--text-secondary) opacity-50 transition-opacity disabled:cursor-not-allowed enabled:cursor-pointer enabled:opacity-100 enabled:hover:opacity-80">
             ← Previous
           </button>
 
           <button
             type="button"
-            onClick={goNext}
-            className="rounded-full bg-(--brand-primary) px-5 py-2.5 text-sm font-semibold text-(--text-inverse) shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:bg-(--brand-primary-hover) cursor-pointer">
-            {isLastStep ? "🚀 Publish Listing" : "Next Step →"}
+            onClick={handlePrimaryAction}
+            disabled={isSubmitting}
+            className="rounded-full bg-(--brand-primary) px-5 py-2.5 text-sm font-semibold text-(--text-inverse) shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:bg-(--brand-primary-hover) cursor-pointer disabled:cursor-not-allowed disabled:opacity-70">
+            {isLastStep ?
+              isSubmitting ?
+                "Publishing…"
+              : "🚀 Publish Listing"
+            : "Next Step →"}
           </button>
         </div>
       </div>
