@@ -1,4 +1,4 @@
-export type ListingStatus = "AVAILABLE" | "PENDING" | "SOLD";
+export type ListingStatus = "AVAILABLE" | "PENDING" | "RENTED" | "EXPIRED";
 
 export interface Item {
   id: string;
@@ -27,7 +27,8 @@ export interface Item {
     sortOrder: number;
   }>;
   thumbnailUrl?: string;
-  isSaved: boolean;
+  isSaved?: boolean;
+  whatsappLink?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -35,7 +36,15 @@ export interface Item {
 export type ListingRow = Item;
 
 export interface ListingsResponse {
+  message: string;
+  status: number;
   data: {
     items: Item[];
+    meta: {
+      page: number;
+      limit: number;
+      total: number;
+      pages: number;
+    };
   };
 }
