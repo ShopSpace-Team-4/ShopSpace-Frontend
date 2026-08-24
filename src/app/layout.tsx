@@ -39,7 +39,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${ibmPlexSansArabic.variable} ${jetBrainsMono.variable}`}>
+      className={`${inter.variable} ${ibmPlexSansArabic.variable} ${jetBrainsMono.variable}`}
+    >
       <body className="min-h-full flex flex-col font-sans bg-base text-primary">
         <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID_HERE">
           {children}
