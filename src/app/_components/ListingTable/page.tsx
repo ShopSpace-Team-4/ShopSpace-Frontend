@@ -1,52 +1,39 @@
+"use client";
+
 import Image from "next/image";
 import { Plus, Eye, Pencil } from "lucide-react";
+import type { Item, ListingStatus } from "@/types/listing";
 
 // ---------- Types ----------
 
-export type ListingStatus = "available" | "pending" | "sold";
-
-export interface ListingRow {
-  id: string;
-  imageUrl: string;
-  title: string;
-  neighborhood: string;
-  city: string;
-  category: string;
-  areaSqm: number;
-  price: number;
-  currency?: string; // e.g. "LE"
-  pricePeriod?: string; // e.g. "yr"
-  status: ListingStatus;
-}
-
 export interface ListingsTableProps {
   title?: string;
-  listings: ListingRow[];
+  listings: Item[];
   isLoading?: boolean;
   onAddNew?: () => void;
-  onView?: (listing: ListingRow) => void;
-  onEdit?: (listing: ListingRow) => void;
+  onView?: (listing: Item) => void;
+  onEdit?: (listing: Item) => void;
   className?: string;
 }
 
 // ---------- Config ----------
 
 const statusStyles: Record<ListingStatus, string> = {
-  available: "bg-emerald-50 text-emerald-600",
-  pending: "bg-amber-50 text-amber-600",
-  sold: "bg-rose-50 text-rose-600",
+  AVAILABLE: "bg-emerald-50 text-emerald-600",
+  PENDING: "bg-amber-50 text-amber-600",
+  SOLD: "bg-rose-50 text-rose-600",
 };
 
 const statusDot: Record<ListingStatus, string> = {
-  available: "bg-emerald-500",
-  pending: "bg-amber-500",
-  sold: "bg-rose-500",
+  AVAILABLE: "bg-emerald-500",
+  PENDING: "bg-amber-500",
+  SOLD: "bg-rose-500",
 };
 
 const statusLabels: Record<ListingStatus, string> = {
-  available: "Available",
-  pending: "Pending",
-  sold: "Sold",
+  AVAILABLE: "Available",
+  PENDING: "Pending",
+  SOLD: "Sold",
 };
 
 // ---------- Component ----------
@@ -122,7 +109,13 @@ export default function ListingsTable({
                     <div className="flex items-center gap-3">
                       <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-gray-100">
                         <Image
-                          src={listing.imageUrl}
+                          src={
+                            listing.thumbnailUrl ??
+                            listing.media.find(
+                              (media) => media.mediaType === "image",
+                            )?.url ??
+                            "/space-shop.png"
+                          }
                           alt={listing.title}
                           fill
                           sizes="40px"
@@ -134,7 +127,7 @@ export default function ListingsTable({
                           {listing.title}
                         </p>
                         <p className="text-xs text-gray-400">
-                          {listing.neighborhood}, {listing.city}
+                          {listing.district}, {listing.city}
                         </p>
                       </div>
                     </div>
@@ -152,8 +145,7 @@ export default function ListingsTable({
 
                   {/* Price */}
                   <td className="px-5 py-3 font-medium text-gray-900">
-                    {listing.price.toLocaleString()}{" "}
-                    {listing.currency ?? "LE"}
+                    {listing.annualRent.toLocaleString()} {listing.currency}
                   </td>
 
                   {/* Status */}
