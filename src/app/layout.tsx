@@ -3,6 +3,7 @@ import { Inter, IBM_Plex_Sans_Arabic, JetBrains_Mono } from "next/font/google";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./globals.css";
 import { UserProvider } from "@/context/UserContext";
+import Provider from "./provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -38,7 +39,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${ibmPlexSansArabic.variable} ${jetBrainsMono.variable}`}>
+      className={`${inter.variable} ${ibmPlexSansArabic.variable} ${jetBrainsMono.variable}`}
+    >
       <body className="min-h-full flex flex-col font-sans bg-base text-primary">
         <UserProvider>
           <GoogleOAuthProvider

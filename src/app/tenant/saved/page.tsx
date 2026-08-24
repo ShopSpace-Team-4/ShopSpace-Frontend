@@ -4,15 +4,18 @@ import { useState } from "react";
 import SimpCard, {
   SimplePropertyCardProps,
 } from "../../../shared/simplecard/Simplecard";
+import { useGetListings } from "@/services/savedListing";
 
-// بيانات تجريبية مؤقتة — استبدليها لاحقًا ببيانات جايه من الـ API
-const savedListings: Omit<
+export type SavedListing = Omit<
   SimplePropertyCardProps,
   "onToggleFavorite" | "onClick"
->[] = [
+>;
+
+// بيانات تجريبية مؤقتة — استبدليها لاحقًا ببيانات جايه من الـ API
+const savedListings: SavedListing[] = [
   {
     id: "1",
-    imageUrl: "/images/mall-escalator.jpg",
+    imageUrl: "/LoginImg.jpg",
     title: "Prime Corner Unit",
     neighborhood: "Mandra",
     city: "Alexandria",
@@ -26,7 +29,7 @@ const savedListings: Omit<
 
 function Page() {
   const [favoritedIds, setFavoritedIds] = useState<Set<string>>(
-    new Set(savedListings.filter((l) => l.isFavorited).map((l) => l.id))
+    new Set(savedListings.filter((l) => l.isFavorited).map((l) => l.id)),
   );
 
   function handleToggleFavorite(id: string) {
@@ -36,6 +39,7 @@ function Page() {
       return next;
     });
   }
+  // const { data } = useGetListings();
 
   return (
     <div className="p-6">
