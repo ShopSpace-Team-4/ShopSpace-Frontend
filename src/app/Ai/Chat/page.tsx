@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import AIBusinessAdvisorView, { Message } from "./AIBusinessAdvisorView";
+import AIBusinessAdvisorView, { Message, Recommendation } from "./AIBusinessAdvisorView";
+import { sendAdvisorMessage } from "@/actions/advisor";
 
 export default function AIBusinessAdvisorPage() {
   const [chatInput, setChatInput] = useState("");
-  const [activeTab, setActiveTab] = useState<"chat" | "recommendations">(
-    "chat",
-  );
+  const [activeTab, setActiveTab] = useState<"chat" | "recommendations">("chat");
+  const [isLoading, setIsLoading] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
 
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -29,10 +31,11 @@ export default function AIBusinessAdvisorPage() {
     setActiveTab(tab);
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!chatInput.trim()) return;
+    const currentInput = chatInput.trim();
+    if (!currentInput || currentInput.length < 2 || currentInput.length > 2000 || isLoading) return;
 
     const currentTime = new Date().toLocaleTimeString([], {
       hour: "2-digit",
@@ -41,33 +44,69 @@ export default function AIBusinessAdvisorPage() {
 
     const newUserMessage: Message = {
       id: Date.now().toString(),
-      text: chatInput,
+      text: currentInput,
       sender: "user",
       timestamp: currentTime,
     };
 
     setMessages((prev) => [...prev, newUserMessage]);
-    setChatInput(""); 
+    setChatInput("");
+    setIsLoading(true);
 
-    setTimeout(() => {
+    const result = await sendAdvisorMessage(currentInput, sessionId);
+
+    if (result.success && result.data) {
+      if (!sessionId && result.data.sessionId) {
+        setSessionId(result.data.sessionId);
+      }
+
       const newAIMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "That's an interesting requirement! Based on current market trends, I've updated the recommendations tab for you. Have a look!",
+        text: result.data.answer,
         sender: "ai",
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         }),
       };
+
       setMessages((prev) => [...prev, newAIMessage]);
-    }, 1500);
+
+      if (result.data.recommendedListings && result.data.recommendedListings.length > 0) {
+        const mappedRecommendations: Recommendation[] = result.data.recommendedListings.map(
+          (listing: any) => ({
+            id: listing.id || Math.random().toString(),
+            title: listing.title || "Recommended Space",
+            location: listing.city || listing.location || "Location not specified",
+            price: listing.rent ? `${listing.rent} LE/yr` : "Price upon request",
+            imageUrl: listing.imageUrl || null,
+          })
+        );
+        setRecommendations(mappedRecommendations);
+      }
+    } else {
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: `Error: ${result.error}`,
+        sender: "ai",
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    }
+
+    setIsLoading(false);
   };
 
   return (
     <AIBusinessAdvisorView
       chatInput={chatInput}
       activeTab={activeTab}
-      messages={messages} 
+      messages={messages}
+      recommendations={recommendations}
+      isLoading={isLoading}
       onInputChange={handleInputChange}
       onTabChange={handleTabChange}
       onSendMessage={handleSendMessage}

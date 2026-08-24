@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Send } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import Image from "next/image";
 
 export interface Message {
@@ -9,10 +10,20 @@ export interface Message {
   timestamp: string;
 }
 
+export interface Recommendation {
+  id: string;
+  title: string;
+  location: string;
+  price: string | number;
+  imageUrl?: string;
+}
+
 interface AIBusinessAdvisorViewProps {
   chatInput: string;
   activeTab: "chat" | "recommendations";
-  messages: Message[]; // ضفنا الرسايل هنا
+  messages: Message[];
+  recommendations: Recommendation[];
+  isLoading: boolean;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onTabChange: (tab: "chat" | "recommendations") => void;
   onSendMessage: (e: React.FormEvent) => void;
@@ -22,33 +33,36 @@ export default function AIBusinessAdvisorView({
   chatInput,
   activeTab,
   messages,
+  recommendations,
+  isLoading,
   onInputChange,
   onTabChange,
   onSendMessage,
 }: AIBusinessAdvisorViewProps) {
-  // Ref عشان ننزل لآخر الشات تلقائي
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // تشغيل النزول التلقائي كل ما الرسايل تتغير
   useEffect(() => {
     scrollToBottom();
-  }, [messages, activeTab]);
+  }, [messages, activeTab, isLoading]);
 
   const AILogo = ({ size = "large" }: { size?: "large" | "small" }) => (
     <div
-      className={`flex items-center justify-center bg-[#06b6d4] rounded-xl shrink-0 ${size === "large" ? "w-10 h-10" : "w-8 h-8 rounded-lg"}`}>
+      className={`flex items-center justify-center bg-[#06b6d4] rounded-xl shrink-0 ${
+        size === "large" ? "w-10 h-10" : "w-8 h-8 rounded-lg"
+      }`}>
       <div
-        className={`border-2 border-[#0f172a] rotate-45 ${size === "large" ? "w-4 h-4" : "w-3 h-3"}`}></div>
+        className={`border-2 border-[#0f172a] rotate-45 ${
+          size === "large" ? "w-4 h-4" : "w-3 h-3"
+        }`}></div>
     </div>
   );
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 font-sans">
-      {/* ---------------- Header ---------------- */}
       <header className="flex items-center justify-between px-8 py-5 bg-[#1a2332] text-white">
         <div className="flex items-center gap-4">
           <AILogo />
@@ -62,7 +76,6 @@ export default function AIBusinessAdvisorView({
           </div>
         </div>
 
-        {/* Status Badge */}
         <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full">
           <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
           <span className="text-[11px] font-bold text-emerald-600">
@@ -71,44 +84,46 @@ export default function AIBusinessAdvisorView({
         </div>
       </header>
 
-      {/* ---------------- Main Content ---------------- */}
       <main className="flex flex-col lg:flex-row flex-1 gap-6 p-8 max-w-350 mx-auto w-full">
-        {/* ----- الجانب الأيسر ----- */}
         <div className="flex flex-col flex-1 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden h-[calc(100vh-120px)]">
-          {/* Tabs */}
           <div className="flex border-b border-slate-100">
             <button
               onClick={() => onTabChange("chat")}
-              className={`flex-1 py-4 text-sm font-semibold transition-colors cursor-pointer border-b-2 ${activeTab === "chat" ? "text-blue-600 border-blue-600 bg-blue-50/30" : "text-slate-500 border-transparent hover:text-slate-700"}`}>
+              className={`flex-1 py-4 text-sm font-semibold transition-colors cursor-pointer border-b-2 ${
+                activeTab === "chat" ?
+                  "text-blue-600 border-blue-600 bg-blue-50/30"
+                : "text-slate-500 border-transparent hover:text-slate-700"
+              }`}>
               Chat
             </button>
             <button
               onClick={() => onTabChange("recommendations")}
-              className={`flex-1 py-4 text-sm font-semibold transition-colors cursor-pointer border-b-2 ${activeTab === "recommendations" ? "text-blue-600 border-blue-600 bg-blue-50/30" : "text-slate-500 border-transparent hover:text-slate-700"}`}>
+              className={`flex-1 py-4 text-sm font-semibold transition-colors cursor-pointer border-b-2 ${
+                activeTab === "recommendations" ?
+                  "text-blue-600 border-blue-600 bg-blue-50/30"
+                : "text-slate-500 border-transparent hover:text-slate-700"
+              }`}>
               Recommendations
             </button>
           </div>
 
           {activeTab === "chat" ?
             <>
-              {/* Chat Messages */}
               <div className="flex-1 p-6 overflow-y-auto flex flex-col gap-6">
                 {messages.map((msg) =>
                   msg.sender === "ai" ?
-                    /* شكل رسالة الـ AI */
                     <div key={msg.id} className="flex gap-4 max-w-2xl">
                       <AILogo size="small" />
                       <div className="flex flex-col gap-1">
-                        <div className="p-4 bg-slate-50 text-slate-700 text-sm leading-relaxed rounded-2xl rounded-tl-sm border border-slate-100">
-                          {msg.text}
+                        <div className="p-4 bg-slate-50 text-slate-700 text-sm leading-relaxed rounded-2xl rounded-tl-sm border border-slate-100 [&>p]:mb-2 [&>ul]:list-disc [&>ul]:ml-4 [&>ol]:list-decimal [&>ol]:ml-4 [&_strong]:font-bold">
+                          <ReactMarkdown>{msg.text}</ReactMarkdown>
                         </div>
                         <span className="text-[10px] text-slate-400 font-medium ml-1">
                           {msg.timestamp}
                         </span>
                       </div>
                     </div>
-                  : /* شكل رسالة المستخدم */
-                    <div
+                  : <div
                       key={msg.id}
                       className="flex gap-4 max-w-2xl self-end flex-row-reverse">
                       <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
@@ -127,11 +142,23 @@ export default function AIBusinessAdvisorView({
                     </div>,
                 )}
 
-                {/* ده عنصر فاضي عشان السكرول يقف عنده */}
+                {isLoading && (
+                  <div className="flex gap-4 max-w-2xl">
+                    <AILogo size="small" />
+                    <div className="p-4 bg-slate-50 rounded-2xl rounded-tl-sm border border-slate-100 flex items-center gap-1.5 h-13">
+                      <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
+                      <span
+                        className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"
+                        style={{ animationDelay: "0.2s" }}></span>
+                      <span
+                        className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"
+                        style={{ animationDelay: "0.4s" }}></span>
+                    </div>
+                  </div>
+                )}
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Input Area */}
               <div className="p-4 border-t border-slate-100 flex flex-col gap-4">
                 <div className="flex flex-wrap gap-2">
                   <button
@@ -157,17 +184,6 @@ export default function AIBusinessAdvisorView({
                     className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs font-medium text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer">
                     What size do I need for a boutique clothing store?
                   </button>
-                  <button
-                    onClick={() =>
-                      onInputChange({
-                        target: {
-                          value: "Compare Tahlia Street vs Al Olaya for F&B",
-                        },
-                      } as React.ChangeEvent<HTMLInputElement>)
-                    }
-                    className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs font-medium text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer">
-                    Compare Tahlia Street vs Al Olaya for F&B
-                  </button>
                 </div>
 
                 <form
@@ -177,122 +193,66 @@ export default function AIBusinessAdvisorView({
                     type="text"
                     value={chatInput}
                     onChange={onInputChange}
+                    disabled={isLoading}
                     placeholder="Ask about locations, business types, budgets..."
-                    className="w-full py-4 pl-5 pr-14 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors"
+                    className="w-full py-4 pl-5 pr-14 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                   <button
                     type="submit"
-                    disabled={!chatInput.trim()}
+                    disabled={!chatInput.trim() || isLoading}
                     className="absolute right-2 flex items-center justify-center w-10 h-10 bg-[#81a1f1] hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl transition-colors shadow-sm cursor-pointer">
                     <Send size={18} className="-ml-0.5" />
                   </button>
                 </form>
               </div>
             </>
-          : /* Recommendations Content */
-            <div className="flex-1 p-6 overflow-y-auto bg-white flex flex-col gap-3">
-              <p className="text-xs text-slate-500 mb-2">
-                Based on the conversation context, here are your top 3
-                recommended spaces ranked by AI location score:
+          : <div className="flex-1 p-6 overflow-y-auto bg-white flex flex-col gap-3">
+              <p className="text-xs text-slate-500 mb-4">
+                Based on the conversation context, here are your top recommended
+                spaces:
               </p>
 
-              {/* Card 1 */}
-              <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl hover:border-blue-200 hover:bg-blue-50/30 transition-colors cursor-pointer">
-                <div className="flex items-center gap-4">
-                  <div className="relative w-20 h-14 rounded-lg overflow-hidden shrink-0 bg-slate-200">
-                    <Image
-                      src="/images/mall-escalator.jpg"
-                      alt="Space"
-                      fill
-                      sizes="80px"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <h4 className="text-xs font-extrabold text-slate-900">
-                      #1 King Fahd Road Corner
-                    </h4>
-                    <span className="text-[10px] text-slate-400">
-                      Miami , Alexandria
-                    </span>
-                    <span className="text-xs font-bold text-blue-600 mt-0.5">
-                      5,000 LE/yr
-                    </span>
-                  </div>
+              {recommendations.length === 0 ?
+                <div className="text-center text-sm text-slate-500 mt-10">
+                  No recommendations available yet. Start chatting to get
+                  personalized spaces!
                 </div>
-                <div className="w-8 h-8 rounded-full bg-white border border-slate-100 flex items-center justify-center shrink-0 shadow-sm">
-                  <span className="text-[10px] font-bold text-emerald-500">
-                    92
-                  </span>
-                </div>
-              </div>
-
-              {/* Card 2 */}
-              <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl hover:border-blue-200 hover:bg-blue-50/30 transition-colors cursor-pointer">
-                <div className="flex items-center gap-4">
-                  <div className="relative w-20 h-14 rounded-lg overflow-hidden shrink-0 bg-slate-200">
-                    <Image
-                      src="/images/mall-escalator.jpg"
-                      alt="Space"
-                      fill
-                      sizes="80px"
-                      className="object-cover"
-                    />
+              : recommendations.map((rec, index) => (
+                  <div
+                    key={rec.id}
+                    className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl hover:border-blue-200 hover:bg-blue-50/30 transition-colors cursor-pointer">
+                    <div className="flex items-center gap-4">
+                      <div className="relative w-20 h-14 rounded-lg overflow-hidden shrink-0 bg-slate-200">
+                        <Image
+                          width={10}
+                          height={10}
+                          src={
+                            rec.imageUrl ||
+                            "https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&q=80"
+                          }
+                          alt={rec.title}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-0.5">
+                        <h4 className="text-xs font-extrabold text-slate-900">
+                          #{index + 1} {rec.title}
+                        </h4>
+                        <span className="text-[10px] text-slate-400">
+                          {rec.location}
+                        </span>
+                        <span className="text-xs font-bold text-blue-600 mt-0.5">
+                          {rec.price}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-0.5">
-                    <h4 className="text-xs font-extrabold text-slate-900">
-                      #2 Tahlia Street Ground Floor
-                    </h4>
-                    <span className="text-[10px] text-slate-400">
-                      Miami , Alexandria
-                    </span>
-                    <span className="text-xs font-bold text-blue-600 mt-0.5">
-                      5,000 LE/yr
-                    </span>
-                  </div>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-white border border-slate-100 flex items-center justify-center shrink-0 shadow-sm">
-                  <span className="text-[10px] font-bold text-emerald-500">
-                    87
-                  </span>
-                </div>
-              </div>
-
-              {/* Card 3 */}
-              <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl hover:border-blue-200 hover:bg-blue-50/30 transition-colors cursor-pointer">
-                <div className="flex items-center gap-4">
-                  <div className="relative w-20 h-14 rounded-lg overflow-hidden shrink-0 bg-slate-200">
-                    <Image
-                      src="/images/mall-escalator.jpg"
-                      alt="Space"
-                      fill
-                      sizes="80px"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <h4 className="text-xs font-extrabold text-slate-900">
-                      #3 Granada Mall Boutique
-                    </h4>
-                    <span className="text-[10px] text-slate-400">
-                      Miami , Alexandria
-                    </span>
-                    <span className="text-xs font-bold text-blue-600 mt-0.5">
-                      5,000 LE/yr
-                    </span>
-                  </div>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-white border border-slate-100 flex items-center justify-center shrink-0 shadow-sm">
-                  <span className="text-[10px] font-bold text-emerald-500">
-                    84
-                  </span>
-                </div>
-              </div>
+                ))
+              }
             </div>
           }
         </div>
 
-        {/* ----- الجانب الأيمن: الـ Widgets ----- */}
         <div className="w-full lg:w-95 flex flex-col gap-6 shrink-0 h-[calc(100vh-120px)] overflow-y-auto pr-1 pb-4">
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
             <div className="mb-6">
@@ -354,22 +314,6 @@ export default function AIBusinessAdvisorView({
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="bg-blue-50/50 rounded-2xl border border-blue-100 shadow-sm p-6">
-            <h3 className="font-bold text-slate-900 mb-4">
-              AI Confidence Score
-            </h3>
-            <div className="flex items-baseline gap-1 mb-2">
-              <span className="text-5xl font-extrabold text-[#3b82f6] tracking-tighter">
-                94
-              </span>
-              <span className="text-xl font-bold text-blue-600/70">/100</span>
-            </div>
-            <p className="text-xs text-slate-500 leading-relaxed max-w-62.5">
-              Based on 6 data points from your conversation. Add more details to
-              improve accuracy.
-            </p>
           </div>
 
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
