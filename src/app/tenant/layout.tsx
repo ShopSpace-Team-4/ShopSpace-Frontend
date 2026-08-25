@@ -4,6 +4,7 @@ import { useRouter } from   "next/navigation";
 import Sidebar, { SidebarNavItem } from "@/shared/Sidebar/Sidebar";
 import { Heart, FileText, History } from "lucide-react";
 import React from "react";
+import DashboardNav from "@/shared/DashboardNav/DashboardNav";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
    const router = useRouter();
@@ -15,7 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-(--bg-base)">
       {/* <DashboardNav /> */}
-
+   <DashboardNav />
       <div className="flex flex-1 items-stretch">
         <Sidebar
   mode="tenant"
