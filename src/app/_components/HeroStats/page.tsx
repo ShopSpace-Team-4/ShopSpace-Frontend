@@ -1,12 +1,5 @@
 import { Search, LayoutGrid, ShieldCheck, MessageSquare, LineChart, FileSignature } from "lucide-react";
 
-const stats = [
-  { value: "12,400+", label: "Active Listings" },
-  { value: "18", label: "Cities Covered" },
-  { value: "8,900+", label: "Successful Rentals" },
-  { value: "3,200+", label: "Verified Landlords" },
-];
-
 const features = [
   {
     icon: Search,
@@ -46,7 +39,24 @@ const features = [
   },
 ];
 
-export default function HeroStats() {
+interface HeroStatsProps {
+  // Real count fetched from the backend (GET /listings meta.total).
+  // The other three stats aren't backed by any API yet, so they stay
+  // as placeholder marketing copy until the backend exposes them.
+  activeListingsCount?: number;
+}
+
+export default function HeroStats({ activeListingsCount }: HeroStatsProps) {
+  const stats = [
+    {
+      value: activeListingsCount != null ? `${activeListingsCount.toLocaleString()}+` : "—",
+      label: "Active Listings",
+    },
+    { value: "18", label: "Cities Covered" },
+    { value: "8,900+", label: "Successful Rentals" },
+    { value: "3,200+", label: "Verified Landlords" },
+  ];
+
   return (
     <section className="w-full bg-(--bg-elevated)">
       <div className="mx-auto w-full max-w-300 px-5 py-16 sm:px-8 sm:py-20 lg:px-0 lg:py-24">

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import {
   ArrowLeft,
@@ -35,6 +35,7 @@ const statusLabel: Record<Item["status"], string> = {
 
 export default function ListingDetailPage() {
   const params = useParams<{ id: string }>();
+  const router = useRouter();
   const [listing, setListing] = useState<Item | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -308,6 +309,13 @@ export default function ListingDetailPage() {
 
             <button
               type="button"
+              onClick={() => {
+                const query = new URLSearchParams({
+                  listingId: listing.id,
+                  title: listing.title,
+                }).toString();
+                router.push(`/Ai/Chat?${query}`);
+              }}
               className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-full bg-(--brand-accent) px-5 py-2.5 text-sm font-semibold text-(--text-inverse) shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:bg-(--brand-accent-hover) cursor-pointer"
             >
               <Sparkles className="h-4 w-4" strokeWidth={2} />
