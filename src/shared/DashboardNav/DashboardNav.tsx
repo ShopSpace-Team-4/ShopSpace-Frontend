@@ -1,10 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Globe, Moon } from "lucide-react";
 
 export default function DashboardNav() {
   return (
     <header className="flex w-full items-center gap-6 border-b border-white/[0.06] bg-(--bg-inverse) px-3 py-3">
-      <div className="flex items-center gap-2.5">
+      <Link href="/" className="flex items-center gap-2.5">
         <Image
           src="/favicon.ico"
           alt="ShopSpace"
@@ -15,7 +16,7 @@ export default function DashboardNav() {
         <span className="text-lg font-extrabold tracking-[-0.3px] text-(--text-inverse)">
           ShopSpace
         </span>
-      </div>
+      </Link>
 
       <div className="ml-auto flex items-center gap-1.5">
         <button className="flex h-[27px] items-center gap-1.5 rounded-md border border-white/10 bg-white/[0.06] px-2.5 text-[11px] font-semibold tracking-wide text-white/75 transition-colors hover:bg-white/10 cursor-pointer">

@@ -5,41 +5,79 @@ import AIAdvisor from "./_components/AIAdvisor/page";
 import ListingsSection from "./_components/ListingsSection/page";
 import TestimonialsSection from "./_components/TestimonialsSection/page";
 import Footer from "@/shared/Footer/Footer";
-export default function Home() {
+import { getListings } from "@/actions/listings";
+import type { PropertyCardProps, PropertyStatus } from "@/shared/Card/card";
+import type { Item } from "@/types/listing";
+
+const statusMap: Record<Item["status"], PropertyStatus> = {
+  AVAILABLE: "available",
+  PENDING: "pending",
+  RENTED: "reserved",
+  EXPIRED: "sold",
+};
+
+function toTitleCase(code: string) {
+  return code
+    .toLowerCase()
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+function toCardProps(item: Item): PropertyCardProps {
+  return {
+    imageUrl: item.thumbnailUrl || "/images/mall-escalator.jpg",
+    status: statusMap[item.status] ?? "available",
+    featured: true,
+    price: item.annualRent,
+    currency: item.currency,
+    pricePeriod: "yr",
+    title: item.title,
+    neighborhood: item.district,
+    city: item.city,
+    areaSqm: item.areaSqm,
+    floors: item.numberOfFloors || 1,
+    rating: 4.8,
+    reviewsCount: 0,
+    amenities: item.amenities.map(toTitleCase),
+    propertyType: item.category,
+    agent: {
+      name: "Listing Owner",
+      avatarUrl: "/images/agent-1.jpg",
+      verified: false,
+    },
+  };
+}
+
+export default async function Home() {
+  let featuredListings: PropertyCardProps[] = [];
+  let activeListingsCount: number | undefined;
+
+  try {
+    const response = await getListings({
+      status: "AVAILABLE",
+      limit: 3,
+      sort: "createdAt:desc",
+    });
+    featuredListings = response.data.items.map(toCardProps);
+    activeListingsCount = response.data.meta.total;
+  } catch {
+    // Landing page still renders fine with an empty featured section
+    // if the API is briefly unavailable.
+    featuredListings = [];
+  }
+
   return (
     <>
       <Navbar />
       <Hero />
-      <HeroStats />
+      <HeroStats activeListingsCount={activeListingsCount} />
       <AIAdvisor />
       <ListingsSection
         eyebrow="Featured Listings"
         heading="Premium Spaces, Ready to Rent"
-        viewAllHref="/listings"
-        listings={[
-          {
-            imageUrl: "/images/mall-escalator.jpg",
-            status: "available",
-            featured: true,
-            price: 85000,
-            currency: "LE",
-            pricePeriod: "yr",
-            title: "Prime Corner Unit – Al Olaya",
-            neighborhood: "Miami",
-            city: "Alexandria",
-            areaSqm: 120,
-            floors: 1,
-            rating: 4.8,
-            reviewsCount: 24,
-            amenities: ["Parking", "Security", "AC", "Elevator", "Storage"],
-            propertyType: "Retail",
-            agent: {
-              name: "Abdullah Al-Rashid",
-              avatarUrl: "/images/agent-1.jpg",
-              verified: true,
-            },
-          },
-        ]}
+        viewAllHref="/dashboard/marketplace"
+        listings={featuredListings}
       />
       <TestimonialsSection
         eyebrow="Social Proof"
