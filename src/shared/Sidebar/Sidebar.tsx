@@ -13,7 +13,10 @@ import {
   LogOut,
   Home,
   Search,
+  Loader2, 
 } from "lucide-react";
+
+import { logoutAction } from "@/actions/user"; 
 
 export type SidebarMode = "landlord" | "tenant";
 
@@ -23,7 +26,7 @@ export type SidebarActiveItem =
   | "overview"
   | "analytics"
   | "personal-details"
-  | (string & {}); // allow custom keys too, when navItems is overridden
+  | (string & {});
 
 export interface SidebarNavItem {
   key: SidebarActiveItem;
@@ -37,11 +40,10 @@ export interface SidebarProps {
   userAvatarUrl?: string;
   mode?: SidebarMode;
   active?: SidebarActiveItem;
-  navItems?: SidebarNavItem[]; // ← جديد: قابلة للتمرير من برّه
-  onModeChange?: (mode: SidebarMode) => void; // ← جديد: عشان الزرارين يبقوا فعليين
+  navItems?: SidebarNavItem[];
+  onModeChange?: (mode: SidebarMode) => void;
 }
 
-// نفس القائمة الافتراضية بتاعت الـ Landlord، بس دلوقتي مجرد "default" مش القيمة الوحيدة
 export const defaultNavItems: SidebarNavItem[] = [
   {
     key: "add-listing",
@@ -85,10 +87,20 @@ export default function Sidebar({
 }: SidebarProps) {
   const [houseIconFailed, setHouseIconFailed] = useState(false);
   const [searchIconFailed, setSearchIconFailed] = useState(false);
+  
+  // حالة التحميل أثناء تسجيل الخروج
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  // دالة تسجيل الخروج
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    await logoutAction();
+    // بنستخدم window.location.href بدل router.push عشان نعمل Refresh كامل يمسح كل الـ State
+    window.location.href = "/Login";
+  };
 
   return (
     <aside className="flex w-[220px] shrink-0 flex-col bg-(--bg-inverse)">
-      {/* Profile + mode switch */}
       <div className="flex flex-col items-center border-b border-white/[0.08]">
         <div className="flex w-full items-center gap-2.5 border-b border-white/[0.08] px-3 py-3.5">
           <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-(--brand-primary-subtle)">
@@ -187,7 +199,8 @@ export default function Sidebar({
                 className={[
                   "text-[10px] font-bold leading-3",
                   mode === "tenant" ? "text-emerald-200" : "text-white/45",
-                ].join(" ")}
+                ].join(" ")
+              }
               >
                 Tenant
               </span>
@@ -239,9 +252,18 @@ export default function Sidebar({
           <Store className="h-3.5 w-3.5" strokeWidth={1.75} />
           Marketplace
         </Link>
-        <button className="flex items-center gap-2 rounded-[10px] px-3 py-2 text-xs text-white/40 transition-colors hover:bg-white/5 cursor-pointer">
-          <LogOut className="h-3.5 w-3.5" strokeWidth={1.75} />
-          Sign Out
+        
+        {/* زرار تسجيل الخروج بعد التعديل */}
+        <button 
+          onClick={handleLogout}
+          disabled={isLoggingOut}
+          className="flex items-center gap-2 rounded-[10px] px-3 py-2 text-xs text-white/40 transition-colors hover:bg-white/5 hover:text-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+          {isLoggingOut ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" strokeWidth={1.75} />
+          ) : (
+            <LogOut className="h-3.5 w-3.5" strokeWidth={1.75} />
+          )}
+          {isLoggingOut ? "Signing out..." : "Sign Out"}
         </button>
       </div>
     </aside>

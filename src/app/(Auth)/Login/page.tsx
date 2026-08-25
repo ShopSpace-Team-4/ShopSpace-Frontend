@@ -2,13 +2,10 @@
 
 import React, { useState } from "react";
 import LoginView from "./LoginView";
-import { useRouter } from "next/navigation";
 import { loginAction, googleAuthAction } from "@/actions/auth";
 import { useGoogleLogin } from "@react-oauth/google"; 
 
 export default function LoginPage() {
-  const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -21,14 +18,15 @@ export default function LoginPage() {
     setIsLoading(true);
 
     const result = await loginAction(email, password);
-    setIsLoading(false);
-
+    
     if (!result.success) {
+      setIsLoading(false); // بنوقف التحميل بس لو في إيرور
       setErrorMsg(result.error as string);
       return;
     }
 
-    router.push("/Welcome");
+    // الحل هنا: توجيه إجباري يضمن إن الـ Middleware يقرا الكوكيز من أول مرة
+    window.location.href = "/Welcome";
   };
 
   const loginWithGoogle = useGoogleLogin({
@@ -36,17 +34,15 @@ export default function LoginPage() {
       setIsLoading(true);
       setErrorMsg(null);
 
-      // هنا بنبعت التوكن للـ Server Action
       const result = await googleAuthAction(tokenResponse.access_token);
-
-      setIsLoading(false);
-
+      
       if (!result.success) {
+        setIsLoading(false);
         setErrorMsg(result.error as string);
         return;
       }
 
-      router.push("/Welcome");
+      window.location.href = "/Welcome";
     },
     onError: () => setErrorMsg("Google Login Failed. Please try again."),
   });

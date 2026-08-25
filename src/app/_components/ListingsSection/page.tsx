@@ -19,11 +19,8 @@ export default function ListingsSection({
   className = "",
 }: ListingsSectionProps) {
   return (
-    // 1. زودنا المسافة الرأسية لـ py-16 أو py-24 عشان السكشن يتنفس
     <section className={`py-16 sm:py-24 ${className}`}>
-      {/* 2. حطينا كل حاجة جوه Container بيوسطن المحتوى وميخليهوش يفرش على الشاشات الكبيرة */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* 3. خلينا الـ Header متجاوب (عمودي في الموبايل، وأفقي في الشاشات الأكبر) */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">

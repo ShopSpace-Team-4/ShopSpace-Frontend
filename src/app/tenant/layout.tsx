@@ -1,11 +1,13 @@
 "use client";
 // import DashboardNav from "@/shared/DashboardNav/DashboardNav";
+import { useRouter } from   "next/navigation";  
 import Sidebar, { SidebarNavItem } from "@/shared/Sidebar/Sidebar";
 import { Heart, FileText, History } from "lucide-react";
 import React from "react";
 
-export default function layout({ children }: { children: React.ReactNode }) {
-    const tenantNavItems: SidebarNavItem[] = [
+export default function Layout({ children }: { children: React.ReactNode }) {
+   const router = useRouter();
+  const tenantNavItems: SidebarNavItem[] = [
   { key: "saved", label: "Saved Listings", href: "/tenant/saved", icon: Heart },
   { key: "requests", label: "My Requests", href: "/tenant/myRequests", icon: FileText },
   { key: "history", label: "Lease History", href: "/tenant/history", icon: History },
@@ -19,6 +21,9 @@ export default function layout({ children }: { children: React.ReactNode }) {
   mode="tenant"
   active="saved"
   navItems={tenantNavItems}
+   onModeChange={(mode) => {
+            if (mode === "landlord") router.push("/dashboard/add-listing");
+          }}
 />
         <main className="flex-1 p-7">{children}</main>
       </div>
